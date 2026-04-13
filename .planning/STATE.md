@@ -1,3 +1,16 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
+last_updated: "2026-04-13T16:43:29.186Z"
+progress:
+  total_phases: 8
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+---
+
 # Project State: TermSuite
 
 **Last Updated:** 2026-04-14
@@ -16,7 +29,7 @@
 See: .planning/PROJECT.md (updated 2026-04-13)
 
 **Core value:** AI 自动关联的知识库——存进去，AI 帮你整理、关联、检索
-**Current focus:** Phase 1 Foundation 完成，准备 Phase 2
+**Current focus:** Phase 02 — Knowledge Advanced
 
 ---
 
@@ -46,6 +59,7 @@ See: .planning/PROJECT.md (updated 2026-04-13)
 | **Total** | **25** | **4** | **21** |
 
 ### Phase 1 Completed Requirements
+
 - KNOW-01: Create and edit markdown notes ✅
 - KNOW-02: Bi-directional wiki links ✅
 - KNOW-03: Full-text search ✅

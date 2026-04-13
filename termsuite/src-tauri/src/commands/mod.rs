@@ -4,3 +4,4 @@ pub mod links;
 pub mod search;
 pub mod ai;
 pub mod relations;
+pub mod graph;

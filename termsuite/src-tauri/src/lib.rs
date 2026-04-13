@@ -6,6 +6,7 @@ mod ai;
 use commands::{storage, notes, links, search};
 use commands::ai as ai_commands;
 use commands::relations;
+use commands::graph;
 use std::sync::Mutex;
 use rusqlite::Connection;
 
@@ -49,6 +50,9 @@ pub fn run() {
             // Relations commands
             relations::get_related_notes,
             relations::get_relationship_analysis,
+            // Graph commands
+            graph::get_graph_data,
+            graph::get_note_connections,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

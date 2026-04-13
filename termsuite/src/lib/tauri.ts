@@ -80,3 +80,52 @@ export const storageApi = {
   setPath: (path: string): Promise<void> =>
     invoke('set_storage_path', { path }),
 };
+
+// Graph types
+export interface GraphNode {
+  id: string;
+  label: string;
+  type: 'raw' | 'wiki' | 'outputs';
+  connection_count: number;
+  directory: string;
+}
+
+export interface GraphEdge {
+  id: string;
+  source: string;
+  target: string;
+  type: 'direct' | 'suggested';
+  score: number;
+}
+
+export interface GraphStats {
+  total_nodes: number;
+  total_edges: number;
+  isolated_nodes: number;
+}
+
+export interface GraphData {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  stats: GraphStats;
+}
+
+export interface GraphFilter {
+  node_type?: 'all' | 'raw' | 'wiki' | 'outputs';
+  min_connections?: number;
+  directory?: string;
+  search_query?: string;
+}
+
+export interface ConnectionsCount {
+  incoming: number;
+  outgoing: number;
+}
+
+export const graphApi = {
+  getGraphData: (filter?: GraphFilter): Promise<GraphData> =>
+    invoke('get_graph_data', { filter }),
+
+  getNoteConnections: (noteId: string): Promise<ConnectionsCount> =>
+    invoke('get_note_connections', { noteId }),
+};
