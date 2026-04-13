@@ -1,10 +1,11 @@
 ---
 phase: 01
 slug: foundation
-status: draft
+status: approved
 shadcn_initialized: false
 preset: pending
 created: 2026-04-13
+reviewed_at: 2026-04-13
 ---
 
 # Phase 01 — UI Design Contract
@@ -57,13 +58,15 @@ Exceptions:
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
 | Body | 16px | 400 (regular) | 1.5 |
-| Label | 14px | 500 (medium) | 1.4 |
+| Label | 14px | 400 (regular) | 1.4 |
 | Heading | 20px | 600 (semibold) | 1.3 |
 | Display | 28px | 600 (semibold) | 1.2 |
 
 **Font Family:** Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif
 
 **Code Font:** JetBrains Mono, Menlo, Monaco, "Courier New", monospace
+
+**Visual Focal Point:** The editor canvas is the primary focal point. The cursor position and current line draw visual attention first. Sidebar and preview panels are secondary support areas.
 
 ---
 
@@ -278,14 +281,14 @@ From CONTEXT.md decisions D-14, D-15:
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-04-13
 
 ---
 
