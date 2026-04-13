@@ -630,19 +630,20 @@ From CONTEXT.md D-12 to D-15.
 
 ---
 
-## Open Questions
+## Resolved Questions
 
-1. **Graph Layout Algorithm:** Default `fcose` is recommended. Confirm, or prefer `cose` (older) or `dagre` (hierarchical)?
+1. **Graph Layout Algorithm:** ✅ fcose confirmed — best for 500-2000 node knowledge graphs
 
-2. **Related Notes Ranking:** Score formula in RESEARCH.md uses weighted factors. Confirm the weights:
+2. **Related Notes Ranking:** ✅ Confirmed weights:
    - Direct link: 0.5
    - Co-citation: 0.15 (max 0.2)
    - Co-reference: 0.15 (max 0.2)
    - Same directory: 0.1
 
-3. **Diff Viewer Complexity:** For simple additions, inline diff might be cleaner than side-by-side. Prefer unified view for small changes (< 10 lines)?
+3. **Diff Viewer:** ✅ Always side-by-side view for consistency
 
 ---
 
 *Generated: 2026-04-14*
+*Resolved: 2026-04-14*
 *Phase: 02-knowledge-advanced*
