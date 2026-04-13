@@ -1,8 +1,0 @@
-/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/lock_api-fcc181dc86b9f12a.d: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/lock_api-0.4.14/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/lock_api-0.4.14/src/mutex.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/lock_api-0.4.14/src/remutex.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/lock_api-0.4.14/src/rwlock.rs
-
-/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/liblock_api-fcc181dc86b9f12a.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/lock_api-0.4.14/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/lock_api-0.4.14/src/mutex.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/lock_api-0.4.14/src/remutex.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/lock_api-0.4.14/src/rwlock.rs
-
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/lock_api-0.4.14/src/lib.rs:
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/lock_api-0.4.14/src/mutex.rs:
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/lock_api-0.4.14/src/remutex.rs:
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/lock_api-0.4.14/src/rwlock.rs:

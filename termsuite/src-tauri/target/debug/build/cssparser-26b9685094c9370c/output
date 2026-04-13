@@ -1,2 +1,0 @@
-cargo:rustc-cfg=rustc_has_pr45225
-cargo:rerun-if-changed=/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cssparser-0.29.6/src/tokenizer.rs

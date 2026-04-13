@@ -1,9 +1,0 @@
-/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/find_msvc_tools-1beaff1b9231b9c4.d: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/find-msvc-tools-0.1.9/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/find-msvc-tools-0.1.9/src/find_tools.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/find-msvc-tools-0.1.9/src/tool.rs
-
-/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/libfind_msvc_tools-1beaff1b9231b9c4.rlib: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/find-msvc-tools-0.1.9/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/find-msvc-tools-0.1.9/src/find_tools.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/find-msvc-tools-0.1.9/src/tool.rs
-
-/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/libfind_msvc_tools-1beaff1b9231b9c4.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/find-msvc-tools-0.1.9/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/find-msvc-tools-0.1.9/src/find_tools.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/find-msvc-tools-0.1.9/src/tool.rs
-
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/find-msvc-tools-0.1.9/src/lib.rs:
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/find-msvc-tools-0.1.9/src/find_tools.rs:
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/find-msvc-tools-0.1.9/src/tool.rs:

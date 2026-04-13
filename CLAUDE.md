@@ -1,7 +1,7 @@
 <!-- GSD:project-start source:PROJECT.md -->
 ## Project
 
-**TermSuite**
+**纳兹 Natsu**
 
 一个 AI 驱动的个人知识终端，整合了 LLM-Wiki 风格知识库、现代终端、AI 对话和自动化控制功能。使用 Rust + Tauri 构建，支持桌面端、Android 和 Web 平台。
 

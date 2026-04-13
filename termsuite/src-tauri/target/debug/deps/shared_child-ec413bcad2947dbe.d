@@ -1,8 +1,0 @@
-/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/shared_child-ec413bcad2947dbe.d: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/shared_child-1.1.1/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/shared_child-1.1.1/src/sys/mod.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/shared_child-1.1.1/src/sys/unix.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/shared_child-1.1.1/src/unix.rs
-
-/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/libshared_child-ec413bcad2947dbe.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/shared_child-1.1.1/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/shared_child-1.1.1/src/sys/mod.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/shared_child-1.1.1/src/sys/unix.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/shared_child-1.1.1/src/unix.rs
-
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/shared_child-1.1.1/src/lib.rs:
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/shared_child-1.1.1/src/sys/mod.rs:
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/shared_child-1.1.1/src/sys/unix.rs:
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/shared_child-1.1.1/src/unix.rs:

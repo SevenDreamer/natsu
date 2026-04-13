@@ -1,9 +1,0 @@
-/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/convert_case-6637333e334f4f6f.d: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/convert_case-0.4.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/convert_case-0.4.0/src/case.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/convert_case-0.4.0/src/words.rs
-
-/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/libconvert_case-6637333e334f4f6f.rlib: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/convert_case-0.4.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/convert_case-0.4.0/src/case.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/convert_case-0.4.0/src/words.rs
-
-/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/libconvert_case-6637333e334f4f6f.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/convert_case-0.4.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/convert_case-0.4.0/src/case.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/convert_case-0.4.0/src/words.rs
-
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/convert_case-0.4.0/src/lib.rs:
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/convert_case-0.4.0/src/case.rs:
-/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/convert_case-0.4.0/src/words.rs:
