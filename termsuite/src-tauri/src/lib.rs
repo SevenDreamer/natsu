@@ -5,6 +5,7 @@ mod ai;
 
 use commands::{storage, notes, links, search};
 use commands::ai as ai_commands;
+use commands::relations;
 use std::sync::Mutex;
 use rusqlite::Connection;
 
@@ -45,6 +46,9 @@ pub fn run() {
             ai_commands::list_providers,
             ai_commands::ai_stream_completion,
             ai_commands::ai_complete,
+            // Relations commands
+            relations::get_related_notes,
+            relations::get_relationship_analysis,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

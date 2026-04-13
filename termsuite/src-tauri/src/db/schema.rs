@@ -47,9 +47,37 @@ CREATE TABLE IF NOT EXISTS backlinks (
 
 CREATE INDEX IF NOT EXISTS idx_backlinks_target ON backlinks(target_note_id);
 CREATE INDEX IF NOT EXISTS idx_backlinks_source ON backlinks(source_note_id);
+
+-- Related notes cache (optional, for performance)
+CREATE TABLE IF NOT EXISTS related_notes (
+    source_note_id TEXT NOT NULL,
+    related_note_id TEXT NOT NULL,
+    relationship_type TEXT NOT NULL,
+    score REAL NOT NULL,
+    computed_at INTEGER NOT NULL,
+    PRIMARY KEY (source_note_id, related_note_id, relationship_type)
+);
+
+CREATE INDEX IF NOT EXISTS idx_related_source ON related_notes(source_note_id);
+CREATE INDEX IF NOT EXISTS idx_related_score ON related_notes(score DESC);
+
+-- Note directories for proximity analysis
+CREATE TABLE IF NOT EXISTS note_directories (
+    note_id TEXT PRIMARY KEY,
+    directory TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_note_directories ON note_directories(directory);
 "#;
 
 pub fn init(conn: &Connection) -> Result<(), String> {
     conn.execute_batch(SCHEMA).map_err(|e| e.to_string())?;
     Ok(())
+}
+
+pub fn extract_directory(path: &str) -> String {
+    std::path::Path::new(path)
+        .parent()
+        .map(|p| p.to_string_lossy().to_string())
+        .unwrap_or_default()
 }
