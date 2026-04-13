@@ -2,11 +2,13 @@ mod commands;
 mod db;
 mod models;
 mod ai;
+mod scheduler;
 
 use commands::{storage, notes, links, search};
 use commands::ai as ai_commands;
 use commands::relations;
 use commands::graph;
+use commands::wiki;
 use std::sync::Mutex;
 use rusqlite::Connection;
 
@@ -19,6 +21,11 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
         .manage(Mutex::new(db))
+        .setup(|app| {
+            let handle = app.handle().clone();
+            scheduler::start_scheduler(handle);
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             // Storage commands
             storage::select_storage_path,
@@ -53,6 +60,11 @@ pub fn run() {
             // Graph commands
             graph::get_graph_data,
             graph::get_note_connections,
+            // Wiki commands
+            wiki::analyze_raw_file,
+            wiki::generate_wiki_suggestion,
+            wiki::apply_wiki_suggestion,
+            wiki::trigger_wiki_processing,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,5 +1,6 @@
 import { Separator } from '@/components/ui/separator';
 import { BacklinksList } from '@/components/editor/BacklinksList';
+import { RelatedNotesPanel } from '@/components/wiki/RelatedNotesPanel';
 import { useNoteStore } from '@/stores/noteStore';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { notesApi } from '@/lib/tauri';
@@ -32,7 +33,11 @@ export function PreviewPanel({ collapsed }: PreviewPanelProps) {
         <h3 className="font-medium text-sm">Info</h3>
       </div>
       <Separator />
-      <BacklinksList noteId={activeNoteId} onNavigate={handleNavigate} />
+      <div className="flex-1 overflow-auto">
+        <BacklinksList noteId={activeNoteId} onNavigate={handleNavigate} />
+        <Separator />
+        <RelatedNotesPanel noteId={activeNoteId} onNavigate={handleNavigate} />
+      </div>
     </div>
   );
 }
