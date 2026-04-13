@@ -199,3 +199,35 @@ pub async fn get_note_connections(
 
     Ok(ConnectionsCount { incoming, outgoing })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_note_type() {
+        assert_eq!(get_note_type("/path/to/raw/note.md"), "raw");
+        assert_eq!(get_note_type("/path/to/wiki/note.md"), "wiki");
+        assert_eq!(get_note_type("/path/to/outputs/note.md"), "outputs");
+        assert_eq!(get_note_type("/path/to/note.md"), "wiki"); // Default
+    }
+
+    #[test]
+    fn test_get_directory() {
+        assert_eq!(get_directory("/wiki/my-note.md"), "/wiki");
+        assert_eq!(get_directory("/raw/folder/note.md"), "/raw/folder");
+        assert_eq!(get_directory("note.md"), "");
+    }
+
+    #[test]
+    fn test_graph_edge_id_format() {
+        let edge = GraphEdge {
+            id: "source-target".to_string(),
+            source: "source".to_string(),
+            target: "target".to_string(),
+            edge_type: "direct".to_string(),
+            score: 1.0,
+        };
+        assert!(edge.id.contains('-'));
+    }
+}
