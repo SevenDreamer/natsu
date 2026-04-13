@@ -1,0 +1,8 @@
+/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/time_core-b8eeb31c68c1bef6.d: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/time-core-0.1.8/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/time-core-0.1.8/src/convert.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/time-core-0.1.8/src/hint.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/time-core-0.1.8/src/util.rs
+
+/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/libtime_core-b8eeb31c68c1bef6.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/time-core-0.1.8/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/time-core-0.1.8/src/convert.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/time-core-0.1.8/src/hint.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/time-core-0.1.8/src/util.rs
+
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/time-core-0.1.8/src/lib.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/time-core-0.1.8/src/convert.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/time-core-0.1.8/src/hint.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/time-core-0.1.8/src/util.rs:

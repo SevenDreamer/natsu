@@ -1,0 +1,8 @@
+/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/icu_normalizer-e48a3fc10493269f.d: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/icu_normalizer-2.2.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/icu_normalizer-2.2.0/src/properties.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/icu_normalizer-2.2.0/src/provider.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/icu_normalizer-2.2.0/src/uts46.rs
+
+/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/libicu_normalizer-e48a3fc10493269f.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/icu_normalizer-2.2.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/icu_normalizer-2.2.0/src/properties.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/icu_normalizer-2.2.0/src/provider.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/icu_normalizer-2.2.0/src/uts46.rs
+
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/icu_normalizer-2.2.0/src/lib.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/icu_normalizer-2.2.0/src/properties.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/icu_normalizer-2.2.0/src/provider.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/icu_normalizer-2.2.0/src/uts46.rs:

@@ -1,0 +1,11 @@
+{
+  "identifier": "default",
+  "description": "Default capabilities for TermSuite",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "fs:default",
+    "dialog:default",
+    "shell:default"
+  ]
+}

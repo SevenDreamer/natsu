@@ -1,0 +1,9 @@
+/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/cargo_platform-ccfd2c26ced9bad2.d: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cargo-platform-0.1.9/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cargo-platform-0.1.9/src/cfg.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cargo-platform-0.1.9/src/error.rs
+
+/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/libcargo_platform-ccfd2c26ced9bad2.rlib: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cargo-platform-0.1.9/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cargo-platform-0.1.9/src/cfg.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cargo-platform-0.1.9/src/error.rs
+
+/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/libcargo_platform-ccfd2c26ced9bad2.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cargo-platform-0.1.9/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cargo-platform-0.1.9/src/cfg.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cargo-platform-0.1.9/src/error.rs
+
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cargo-platform-0.1.9/src/lib.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cargo-platform-0.1.9/src/cfg.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/cargo-platform-0.1.9/src/error.rs:

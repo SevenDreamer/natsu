@@ -1,0 +1,9 @@
+/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/ipnet-01a8c47399832e94.d: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/ipext.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/ipnet.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/mask.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/parser.rs
+
+/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/libipnet-01a8c47399832e94.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/ipext.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/ipnet.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/mask.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/parser.rs
+
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/lib.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/ipext.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/ipnet.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/mask.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ipnet-2.12.0/src/parser.rs:

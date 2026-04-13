@@ -1,0 +1,14 @@
+/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/unic_char_property-ff15e65f878c15c9.d: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/pkg_info.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/property.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/range_types.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/macros.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/tables.rs
+
+/data/data/com.termux/files/home/projects/term/termsuite/src-tauri/target/debug/deps/libunic_char_property-ff15e65f878c15c9.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/pkg_info.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/property.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/range_types.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/macros.rs /data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/tables.rs
+
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/lib.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/pkg_info.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/property.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/range_types.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/macros.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/unic-char-property-0.9.0/src/tables.rs:
+
+# env-dep:CARGO_PKG_DESCRIPTION=UNIC — Unicode Character Tools — Character Property taxonomy, contracts and build macros
+# env-dep:CARGO_PKG_NAME=unic-char-property
+# env-dep:CARGO_PKG_VERSION=0.9.0

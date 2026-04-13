@@ -973,22 +973,28 @@ export function SearchBar() {
 
 **If this table is empty:** All claims in this research were verified or cited - no user confirmation needed.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Storage location selection UI flow**
+1. **Storage location selection UI flow** — RESOLVED
    - What we know: User selects on first launch (D-06)
-   - What's unclear: Should we show a welcome wizard or just a single dialog?
-   - Recommendation: Use `tauri-plugin-dialog`'s `open` with `directory: true` for simplicity in MVP
+   - What was unclear: Should we show a welcome wizard or just a single dialog?
+   - **Decision:** Use `tauri-plugin-dialog`'s `open` with `directory: true` for simplicity in MVP
+   - Resolution: Single dialog approach adopted - see PLAN-01, PLAN-06 for implementation
 
-2. **Raw/wiki/outputs structure usage**
+2. **Raw/wiki/outputs structure usage** — RESOLVED
    - What we know: Three directories exist (D-08, KNOW-04)
-   - What's unclear: What goes in `raw/` vs `wiki/`? Is `outputs/` for AI-generated content?
-   - Recommendation: Define clearly - `raw/` for source materials, `wiki/` for user/AI-edited notes, `outputs/` for AI-generated artifacts (Phase 2+)
+   - What was unclear: What goes in `raw/` vs `wiki/`?
+   - **Decision:** 
+     - `raw/` — Source materials imported by user (PDFs, web clips, images)
+     - `wiki/` — User-created and AI-edited notes (primary working directory)
+     - `outputs/` — AI-generated artifacts (Phase 2+, not used in Phase 1)
+   - Resolution: Directory structure defined in PLAN-01, enforced in storage initialization
 
-3. **Mobile drawer animation library**
+3. **Mobile drawer animation library** — RESOLVED
    - What we know: Mobile uses drawer pattern (D-04)
-   - What's unclear: Should we use a library like `vaul` or build with CSS transforms?
-   - Recommendation: Use CSS transforms for MVP simplicity; `vaul` if gestures needed
+   - What was unclear: Should we use a library like `vaul` or build with CSS transforms?
+   - **Decision:** Use CSS transforms for MVP simplicity
+   - Resolution: PLAN-02 implements CSS transform-based drawer; consider `vaul` in future if gestures needed
 
 ## Environment Availability
 
