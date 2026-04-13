@@ -24,3 +24,12 @@ uuid = { version = "1", features = ["v4"] }
 chrono = "0.4"
 regex = "1"
 lazy_static = "1.4"
+
+# AI Provider dependencies
+async-trait = "0.1"
+reqwest = { version = "0.12", features = ["json", "stream"] }
+tokio-stream = "0.1"
+futures = "0.3"
+keyring = "3"
+serde_repr = "0.1"
+thiserror = "2"

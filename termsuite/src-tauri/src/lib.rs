@@ -1,8 +1,10 @@
 mod commands;
 mod db;
 mod models;
+mod ai;
 
 use commands::{storage, notes, links, search};
+use commands::ai as ai_commands;
 use std::sync::Mutex;
 use rusqlite::Connection;
 
@@ -35,6 +37,14 @@ pub fn run() {
             // Search commands
             search::search_notes,
             search::search_notes_by_tag,
+            // AI commands
+            ai_commands::store_api_key,
+            ai_commands::get_api_key,
+            ai_commands::has_api_key,
+            ai_commands::delete_api_key,
+            ai_commands::list_providers,
+            ai_commands::ai_stream_completion,
+            ai_commands::ai_complete,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
