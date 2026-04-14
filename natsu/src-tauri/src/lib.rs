@@ -3,13 +3,16 @@ mod db;
 mod models;
 mod ai;
 mod scheduler;
+mod terminal;
 
 use commands::{storage, notes, links, search};
 use commands::ai as ai_commands;
 use commands::relations;
 use commands::graph;
 use commands::wiki;
+use commands::terminal as terminal_commands;
 use std::sync::Mutex;
+use tauri::Manager;
 use rusqlite::Connection;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -23,7 +26,12 @@ pub fn run() {
         .manage(Mutex::new(db))
         .setup(|app| {
             let handle = app.handle().clone();
-            scheduler::start_scheduler(handle);
+            scheduler::start_scheduler(handle.clone());
+
+            // Initialize PTY manager for terminal sessions
+            let pty_manager = terminal_commands::init_pty_manager(handle);
+            app.manage(pty_manager);
+
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -65,6 +73,13 @@ pub fn run() {
             wiki::generate_wiki_suggestion,
             wiki::apply_wiki_suggestion,
             wiki::trigger_wiki_processing,
+            // Terminal commands
+            terminal_commands::spawn_terminal,
+            terminal_commands::write_to_pty,
+            terminal_commands::resize_pty,
+            terminal_commands::kill_terminal,
+            terminal_commands::get_terminal_content,
+            terminal_commands::list_terminals,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

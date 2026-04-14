@@ -6,3 +6,4 @@ pub mod ai;
 pub mod relations;
 pub mod graph;
 pub mod wiki;
+pub mod terminal;
