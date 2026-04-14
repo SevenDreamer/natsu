@@ -9,6 +9,22 @@ export interface Message {
   isStreaming: boolean;
 }
 
+export interface ToolConfirmation {
+  toolUseId: string;
+  toolName: string;
+  input: Record<string, unknown>;
+  safetyLevel: 'safe' | 'caution' | 'dangerous';
+  message: string;
+}
+
+export interface ToolExecution {
+  toolUseId: string;
+  toolName: string;
+  status: 'pending' | 'running' | 'success' | 'error';
+  result?: string;
+  error?: string;
+}
+
 interface ChatState {
   // Conversation state
   currentConversationId: string | null;
@@ -18,6 +34,10 @@ interface ChatState {
   currentStreamingId: string | null;
   isLoadingConversations: boolean;
 
+  // Tool confirmation state
+  pendingConfirmation: ToolConfirmation | null;
+  toolExecutions: Map<string, ToolExecution>;
+
   // Actions
   addMessage: (message: Omit<Message, 'id' | 'timestamp' | 'isStreaming'>) => string;
   appendToMessage: (id: string, content: string) => void;
@@ -26,6 +46,12 @@ interface ChatState {
   setGenerating: (isGenerating: boolean) => void;
   clearMessages: () => void;
   removeMessage: (id: string) => void;
+
+  // Tool confirmation actions
+  setPendingConfirmation: (confirmation: ToolConfirmation | null) => void;
+  setToolExecution: (toolUseId: string, execution: Partial<ToolExecution>) => void;
+  clearToolExecution: (toolUseId: string) => void;
+  getToolExecution: (toolUseId: string) => ToolExecution | undefined;
 
   // Conversation management
   loadConversations: () => Promise<void>;
@@ -50,6 +76,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
   isGenerating: false,
   currentStreamingId: null,
   isLoadingConversations: false,
+  pendingConfirmation: null,
+  toolExecutions: new Map<string, ToolExecution>(),
 
   addMessage: (message) => {
     const id = `msg-${Date.now()}-${++messageIdCounter}`;
@@ -102,6 +130,37 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set((state) => ({
       messages: state.messages.filter((msg) => msg.id !== id),
     }));
+  },
+
+  setPendingConfirmation: (confirmation) => {
+    set({ pendingConfirmation: confirmation });
+  },
+
+  setToolExecution: (toolUseId, execution) => {
+    set((state) => {
+      const newExecutions = new Map(state.toolExecutions);
+      const existing = newExecutions.get(toolUseId);
+      newExecutions.set(toolUseId, {
+        toolUseId,
+        toolName: execution.toolName || existing?.toolName || '',
+        status: execution.status || existing?.status || 'pending',
+        result: execution.result ?? existing?.result,
+        error: execution.error ?? existing?.error,
+      });
+      return { toolExecutions: newExecutions };
+    });
+  },
+
+  clearToolExecution: (toolUseId) => {
+    set((state) => {
+      const newExecutions = new Map(state.toolExecutions);
+      newExecutions.delete(toolUseId);
+      return { toolExecutions: newExecutions };
+    });
+  },
+
+  getToolExecution: (toolUseId) => {
+    return get().toolExecutions.get(toolUseId);
   },
 
   loadConversations: async () => {

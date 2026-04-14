@@ -3,7 +3,9 @@ import { listen, UnlistenFn } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
 import { ChatMessage } from './ChatMessage';
 import { MessageInput } from './MessageInput';
-import { useChatStore } from '@/stores/chatStore';
+import { ToolConfirmationDialogContainer } from './ToolConfirmationDialog';
+import { ToolExecutionStatus } from './ToolExecutionStatus';
+import { useChatStore, ToolExecution } from '@/stores/chatStore';
 import { useAIStore } from '@/stores/aiStore';
 import {
   getSelectedCode,
@@ -26,6 +28,9 @@ export function ChatView() {
     getContextMessages,
     saveMessageToDb,
     createConversation,
+    toolExecutions,
+    setPendingConfirmation,
+    setToolExecution,
   } = useChatStore();
 
   const defaultProvider = useAIStore((s) => s.defaultProvider);
@@ -87,7 +92,98 @@ export function ChatView() {
         setGenerating(false);
       });
 
-      unlistenRef.current = [unlistenChunk, unlistenComplete, unlistenError];
+      // Tool use event - AI wants to use a tool
+      const unlistenToolUse = await listen<{
+        id: string;
+        name: string;
+        input: Record<string, unknown>;
+      }>('ai-tool-use', (event) => {
+        const { id, name, input } = event.payload;
+        // Set tool execution as pending
+        setToolExecution(id, {
+          toolName: name,
+          status: 'pending',
+        });
+
+        // Check if this tool requires confirmation
+        // For execute_command, we need to check the safety level
+        if (name === 'execute_command' && input.command) {
+          // Get safety info from backend (would need a separate command)
+          // For now, we'll show confirmation for all execute_command
+          const command = String(input.command);
+          const isDangerous =
+            command.includes('rm ') ||
+            command.includes('sudo') ||
+            command.includes('chmod') ||
+            command.includes('shutdown') ||
+            command.includes('reboot');
+          const isCaution =
+            command.includes('curl') ||
+            command.includes('wget') ||
+            command.includes('mv ') ||
+            command.includes('cp ') ||
+            command.includes('git push');
+          const safetyLevel: 'safe' | 'caution' | 'dangerous' = isDangerous
+            ? 'dangerous'
+            : isCaution
+            ? 'caution'
+            : 'safe';
+
+          if (safetyLevel !== 'safe') {
+            setPendingConfirmation({
+              toolUseId: id,
+              toolName: name,
+              input,
+              safetyLevel,
+              message: `Command: ${command}`,
+            });
+          } else {
+            // Auto-execute safe commands
+            invoke('confirm_tool_execution', {
+              toolUseId: id,
+              toolName: name,
+              input,
+            }).catch((err) => {
+              console.error('Failed to auto-execute tool:', err);
+              setToolExecution(id, {
+                status: 'error',
+                error: String(err),
+              });
+            });
+          }
+        } else {
+          // For other tools, show confirmation dialog by default
+          setPendingConfirmation({
+            toolUseId: id,
+            toolName: name,
+            input,
+            safetyLevel: 'caution',
+            message: `The AI wants to use the "${name}" tool.`,
+          });
+        }
+      });
+
+      // Tool result event
+      const unlistenToolResult = await listen<{
+        tool_use_id: string;
+        content: string;
+        is_error: boolean;
+      }>('ai-tool-result', (event) => {
+        const { tool_use_id, content, is_error } = event.payload;
+        setToolExecution(tool_use_id, {
+          status: is_error ? 'error' : 'success',
+          result: content,
+          error: is_error ? content : undefined,
+        });
+      });
+
+      unlistenRef.current = [
+        unlistenChunk,
+        unlistenComplete,
+        unlistenError,
+        unlistenToolUse,
+        unlistenToolResult,
+      ];
     };
 
     setupListeners();
@@ -95,7 +191,7 @@ export function ChatView() {
     return () => {
       unlistenRef.current.forEach((unlisten) => unlisten());
     };
-  }, [currentStreamingId, appendToMessage, setStreaming, setGenerating]);
+  }, [currentStreamingId, appendToMessage, setStreaming, setGenerating, setToolExecution, setPendingConfirmation]);
 
   const handleSend = useCallback(
     async (content: string) => {
@@ -260,6 +356,17 @@ export function ChatView() {
         )}
       </div>
 
+      {/* Active Tool Executions */}
+      {toolExecutions.size > 0 && (
+        <div className="border-t px-4 py-3 bg-muted/30">
+          <div className="space-y-2">
+            {Array.from(toolExecutions.values()).map((execution) => (
+              <ToolExecutionStatus key={execution.toolUseId} execution={execution} />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Input */}
       <MessageInput
         onSend={handleSend}
@@ -267,6 +374,9 @@ export function ChatView() {
         isGenerating={isGenerating}
         placeholder="Ask anything..."
       />
+
+      {/* Tool Confirmation Dialog */}
+      <ToolConfirmationDialogContainer />
     </div>
   );
 }
