@@ -68,6 +68,28 @@ CREATE TABLE IF NOT EXISTS note_directories (
 );
 
 CREATE INDEX IF NOT EXISTS idx_note_directories ON note_directories(directory);
+
+-- Conversations table for AI chat history
+CREATE TABLE IF NOT EXISTS conversations (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_conversations_updated ON conversations(updated_at DESC);
+
+-- Messages table for AI conversation messages
+CREATE TABLE IF NOT EXISTS messages (
+    id TEXT PRIMARY KEY,
+    conversation_id TEXT NOT NULL,
+    role TEXT NOT NULL CHECK(role IN ('user', 'assistant', 'system')),
+    content TEXT NOT NULL,
+    created_at INTEGER NOT NULL,
+    FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(conversation_id);
 "#;
 
 pub fn init(conn: &Connection) -> Result<(), String> {

@@ -11,6 +11,7 @@ use commands::relations;
 use commands::graph;
 use commands::wiki;
 use commands::terminal as terminal_commands;
+use commands::conversation;
 use std::sync::Mutex;
 use tauri::Manager;
 use rusqlite::Connection;
@@ -80,6 +81,13 @@ pub fn run() {
             terminal_commands::kill_terminal,
             terminal_commands::get_terminal_content,
             terminal_commands::list_terminals,
+            // Conversation commands
+            conversation::create_conversation,
+            conversation::list_conversations,
+            conversation::get_conversation,
+            conversation::add_message,
+            conversation::delete_conversation,
+            conversation::rename_conversation,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
