@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CommandHistory } from './CommandHistory';
 import { ApiCalls } from './ApiCalls';
 import { ScriptLibrary } from './ScriptLibrary';
+import { FileWatchers } from './FileWatchers';
 import { History, Eye, Code, Webhook } from 'lucide-react';
 
 interface AutomationPanelProps {
@@ -47,10 +48,8 @@ export function AutomationPanel({ onRerunCommand }: AutomationPanelProps) {
         <ScriptLibrary />
       </TabsContent>
 
-      <TabsContent value="files" className="flex-1 mt-0">
-        <div className="h-full flex items-center justify-center text-muted-foreground">
-          文件监控功能即将推出 (Phase 6, Plan 03)
-        </div>
+      <TabsContent value="files" className="flex-1 mt-0 overflow-hidden">
+        <FileWatchers />
       </TabsContent>
 
       <TabsContent value="api" className="flex-1 mt-0 overflow-auto">

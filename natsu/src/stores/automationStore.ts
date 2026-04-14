@@ -154,6 +154,43 @@ export interface ScriptExecutionInput {
   timeout?: number;
 }
 
+// File Watcher Types
+export interface FileWatcher {
+  id: string;
+  name: string;
+  path: string;
+  recursive: boolean;
+  event_types: string[];
+  enabled: boolean;
+  trigger_script_id?: string;
+  created_at: number;
+}
+
+export interface FileEvent {
+  id: string;
+  watcher_id: string;
+  event_type: string;
+  path: string;
+  details?: string;
+  timestamp: number;
+}
+
+export interface CreateFileWatcherInput {
+  name: string;
+  path: string;
+  recursive?: boolean;
+  event_types?: string[];
+  trigger_script_id?: string;
+}
+
+export interface FileInfo {
+  name: string;
+  path: string;
+  is_dir: boolean;
+  size?: number;
+  modified?: number;
+}
+
 // ============================================================================
 // Store State
 // ============================================================================
@@ -175,6 +212,12 @@ interface AutomationState {
   scripts: Script[];
   scriptsLoading: boolean;
   scriptsError: string | null;
+
+  // File Watchers
+  fileWatchers: FileWatcher[];
+  fileEvents: FileEvent[];
+  fileWatchersLoading: boolean;
+  fileWatchersError: string | null;
 
   // Actions - Command History
   fetchCommandHistory: (search?: string) => Promise<void>;
@@ -199,6 +242,22 @@ interface AutomationState {
   getScriptContent: (id: string) => Promise<string>;
   getScriptSafety: (id: string) => Promise<ScriptSafetyInfo>;
   executeScript: (input: ScriptExecutionInput) => Promise<ScriptExecutionResult>;
+
+  // Actions - File Watchers
+  fetchFileWatchers: () => Promise<void>;
+  createFileWatcher: (input: CreateFileWatcherInput) => Promise<FileWatcher>;
+  updateFileWatcher: (id: string, enabled: boolean) => Promise<void>;
+  deleteFileWatcher: (id: string) => Promise<void>;
+  fetchFileEvents: (watcherId?: string) => Promise<void>;
+  clearFileEvents: (watcherId?: string) => Promise<void>;
+
+  // Actions - File Operations
+  fileCopy: (src: string, dest: string) => Promise<void>;
+  fileMove: (src: string, dest: string) => Promise<void>;
+  fileDelete: (path: string) => Promise<void>;
+  fileRename: (old: string, new_: string) => Promise<void>;
+  fileExists: (path: string) => Promise<boolean>;
+  fileListDir: (path: string) => Promise<FileInfo[]>;
 }
 
 // ============================================================================
@@ -222,6 +281,12 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
   scripts: [],
   scriptsLoading: false,
   scriptsError: null,
+
+  // Initial state - File Watchers
+  fileWatchers: [],
+  fileEvents: [],
+  fileWatchersLoading: false,
+  fileWatchersError: null,
 
   // Fetch command history
   fetchCommandHistory: async (search?: string) => {
@@ -386,5 +451,94 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
   // Execute script
   executeScript: async (input: ScriptExecutionInput) => {
     return await invoke<ScriptExecutionResult>('execute_script', { input });
+  },
+
+  // ============ File Watcher Actions ============
+
+  // Fetch file watchers
+  fetchFileWatchers: async () => {
+    set({ fileWatchersLoading: true, fileWatchersError: null });
+    try {
+      const watchers = await invoke<FileWatcher[]>('list_file_watchers');
+      set({ fileWatchers: watchers, fileWatchersLoading: false });
+    } catch (error) {
+      set({ fileWatchersError: String(error), fileWatchersLoading: false });
+    }
+  },
+
+  // Create file watcher
+  createFileWatcher: async (input: CreateFileWatcherInput) => {
+    const watcher = await invoke<FileWatcher>('create_file_watcher', { input });
+    set((state) => ({
+      fileWatchers: [...state.fileWatchers, watcher],
+    }));
+    return watcher;
+  },
+
+  // Update file watcher (enable/disable)
+  updateFileWatcher: async (id: string, enabled: boolean) => {
+    await invoke('update_file_watcher', { id, enabled });
+    set((state) => ({
+      fileWatchers: state.fileWatchers.map((w) =>
+        w.id === id ? { ...w, enabled } : w
+      ),
+    }));
+  },
+
+  // Delete file watcher
+  deleteFileWatcher: async (id: string) => {
+    await invoke('delete_file_watcher', { id });
+    set((state) => ({
+      fileWatchers: state.fileWatchers.filter((w) => w.id !== id),
+    }));
+  },
+
+  // Fetch file events
+  fetchFileEvents: async (watcherId?: string) => {
+    try {
+      const events = await invoke<FileEvent[]>('get_file_events', {
+        watcherId,
+        limit: 50,
+      });
+      set({ fileEvents: events });
+    } catch (error) {
+      console.error('Failed to fetch file events:', error);
+    }
+  },
+
+  // Clear file events
+  clearFileEvents: async (watcherId?: string) => {
+    await invoke('clear_file_events', { watcherId });
+    set((state) => ({
+      fileEvents: watcherId
+        ? state.fileEvents.filter((e) => e.watcher_id !== watcherId)
+        : [],
+    }));
+  },
+
+  // ============ File Operation Actions ============
+
+  fileCopy: async (src: string, dest: string) => {
+    await invoke('file_copy', { src, dest });
+  },
+
+  fileMove: async (src: string, dest: string) => {
+    await invoke('file_move', { src, dest });
+  },
+
+  fileDelete: async (path: string) => {
+    await invoke('file_delete', { path });
+  },
+
+  fileRename: async (old: string, new_: string) => {
+    await invoke('file_rename', { old, new: new_ });
+  },
+
+  fileExists: async (path: string) => {
+    return await invoke<boolean>('file_exists', { path });
+  },
+
+  fileListDir: async (path: string) => {
+    return await invoke<FileInfo[]>('file_list_dir', { path });
   },
 }));
