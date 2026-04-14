@@ -5,6 +5,7 @@ import { Sidebar } from './Sidebar';
 import { MainPanel } from './MainPanel';
 import { PreviewPanel } from './PreviewPanel';
 import { MobileDrawer } from './MobileDrawer';
+import { TerminalPanel } from '@/components/terminal/TerminalPanel';
 import { useUIStore } from '@/stores/uiStore';
 
 const MOBILE_BREAKPOINT = 768;
@@ -16,10 +17,12 @@ export function AppLayout() {
   const sidebarOpen = useUIStore((s) => s.sidebarOpen);
   const previewOpen = useUIStore((s) => s.previewOpen);
   const drawerOpen = useUIStore((s) => s.drawerOpen);
+  const terminalOpen = useUIStore((s) => s.terminalOpen);
   const setMobile = useUIStore((s) => s.setMobile);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
   const togglePreview = useUIStore((s) => s.togglePreview);
   const toggleDrawer = useUIStore((s) => s.toggleDrawer);
+  const toggleTerminal = useUIStore((s) => s.toggleTerminal);
 
   useEffect(() => {
     setMounted(true);
@@ -28,6 +31,20 @@ export function AppLayout() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, [setMobile]);
+
+  // Keyboard shortcut for terminal toggle (Ctrl+`)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+` (backtick) to toggle terminal
+      if (e.ctrlKey && e.key === '`') {
+        e.preventDefault();
+        toggleTerminal();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [toggleTerminal]);
 
   if (!mounted) {
     return (
@@ -50,6 +67,9 @@ export function AppLayout() {
         <main className="flex-1 overflow-hidden">
           <MainPanel />
         </main>
+        {terminalOpen && (
+          <TerminalPanel className="shrink-0" />
+        )}
         <MobileDrawer open={drawerOpen} onClose={toggleDrawer}>
           <div className="p-4 text-sm text-muted-foreground">
             File navigation will appear here
@@ -63,10 +83,17 @@ export function AppLayout() {
   return (
     <div className="h-screen flex bg-background">
       <Sidebar collapsed={!sidebarOpen} onToggle={toggleSidebar} />
-      <main className="flex-1 min-w-0">
-        <MainPanel />
+      <main className="flex-1 min-w-0 flex flex-col">
+        <div className="flex-1 min-h-0 flex">
+          <div className="flex-1 min-w-0">
+            <MainPanel />
+          </div>
+          <PreviewPanel collapsed={!previewOpen} onToggle={togglePreview} />
+        </div>
+        {terminalOpen && (
+          <TerminalPanel className="shrink-0" />
+        )}
       </main>
-      <PreviewPanel collapsed={!previewOpen} onToggle={togglePreview} />
     </div>
   );
 }

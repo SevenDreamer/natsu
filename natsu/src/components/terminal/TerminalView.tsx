@@ -3,6 +3,7 @@
  *
  * xterm.js terminal component that connects to PTY backend.
  * Supports theme switching synced with global theme.
+ * Supports inline images via iTerm2 protocol and SIXEL.
  */
 
 import { useEffect, useRef, useCallback, useState } from 'react';
@@ -10,7 +11,7 @@ import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 
-import { terminalApi, terminalEvents } from '@/lib/terminal';
+import { terminalApi, terminalEvents, ImageAddon, type IImageAddonOptions, getTerminalBuffer } from '@/lib/terminal';
 import { useTerminalStore } from '@/stores/terminalStore';
 import { useSettingsStore } from '@/stores/settingsStore';
 import type { UnlistenFn } from '@tauri-apps/api/event';
@@ -70,10 +71,25 @@ const themes = {
   },
 };
 
+// Image addon configuration for iTerm2/SIXEL support
+const imageAddonOptions: IImageAddonOptions = {
+  enableSizeReports: true,    // Enable CSI t reports for proper sizing
+  pixelLimit: 16777216,       // 16M pixels max single image
+  sixelSupport: true,         // Enable SIXEL support
+  sixelScrolling: true,       // Scroll on image output
+  sixelPaletteLimit: 256,     // Initial SIXEL palette size
+  sixelSizeLimit: 25000000,   // 25MB max sixel sequence
+  storageLimit: 128,          // 128MB FIFO storage limit
+  showPlaceholder: true,      // Show placeholder for evicted images
+  iipSupport: true,           // Enable iTerm2 inline image protocol
+  iipSizeLimit: 20000000,     // 20MB max IIP sequence
+};
+
 export function TerminalView({ sessionId, onExit }: TerminalViewProps) {
   const terminalRef = useRef<HTMLDivElement>(null);
   const xtermRef = useRef<Terminal | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
+  const imageAddonRef = useRef<ImageAddon | null>(null);
   const unlistenersRef = useRef<UnlistenFn[]>([]);
 
   const [isReady, setIsReady] = useState(false);
@@ -110,10 +126,12 @@ export function TerminalView({ sessionId, onExit }: TerminalViewProps) {
     // Create addons
     const fitAddon = new FitAddon();
     const webLinksAddon = new WebLinksAddon();
+    const imageAddon = new ImageAddon(imageAddonOptions);
 
     // Load addons
     terminal.loadAddon(fitAddon);
     terminal.loadAddon(webLinksAddon);
+    terminal.loadAddon(imageAddon);
 
     // Open terminal in DOM
     terminal.open(terminalRef.current);
@@ -129,6 +147,7 @@ export function TerminalView({ sessionId, onExit }: TerminalViewProps) {
     // Store refs
     xtermRef.current = terminal;
     fitAddonRef.current = fitAddon;
+    imageAddonRef.current = imageAddon;
 
     // Handle user input
     terminal.onData((data) => {
@@ -144,10 +163,15 @@ export function TerminalView({ sessionId, onExit }: TerminalViewProps) {
 
     // Setup event listeners
     const setupListeners = async () => {
+      // Get buffer for this session
+      const buffer = getTerminalBuffer(sessionId);
+
       // Output event - when terminal content changes
       const unlistenOutput = await terminalEvents.onOutput(sessionId, async () => {
         try {
           const content = await terminalApi.getContent(sessionId);
+          // Capture content to buffer for saving
+          buffer.append(content);
           // Clear and write new content
           terminal.clear();
           terminal.write(content);
@@ -185,6 +209,7 @@ export function TerminalView({ sessionId, onExit }: TerminalViewProps) {
       terminal.dispose();
       xtermRef.current = null;
       fitAddonRef.current = null;
+      imageAddonRef.current = null;
       setIsReady(false);
     };
   }, [sessionId, onExit, updateSessionSize, getEffectiveTheme]);

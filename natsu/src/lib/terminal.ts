@@ -2,10 +2,14 @@
  * Terminal API module for PTY backend communication
  *
  * Provides functions to invoke Tauri commands and listen to PTY events.
+ * Also exports the ImageAddon for iTerm2/SIXEL image support.
  */
 
 import { invoke } from '@tauri-apps/api/core';
 import { listen, type UnlistenFn } from '@tauri-apps/api/event';
+
+// Re-export ImageAddon for iTerm2/SIXEL image support in terminals
+export { ImageAddon, type IImageAddonOptions } from '@xterm/addon-image';
 
 // Terminal session configuration
 export interface SpawnTerminalConfig {
@@ -22,6 +26,101 @@ export interface TerminalInfo {
   id: string;
   cols: number;
   rows: number;
+}
+
+/**
+ * TerminalBuffer - Captures terminal output for saving to knowledge base
+ */
+export class TerminalBuffer {
+  private buffer: string = '';
+  private maxSize: number;
+  private sessionId: string;
+
+  constructor(sessionId: string, maxSize: number = 100000) {
+    this.sessionId = sessionId;
+    this.maxSize = maxSize;
+  }
+
+  /**
+   * Append data to the buffer
+   */
+  append(data: string): void {
+    this.buffer += data;
+    // Trim buffer if it exceeds max size
+    if (this.buffer.length > this.maxSize) {
+      this.buffer = this.buffer.slice(-this.maxSize);
+    }
+  }
+
+  /**
+   * Get the entire buffer
+   */
+  getBuffer(): string {
+    return this.buffer;
+  }
+
+  /**
+   * Get last N lines from buffer
+   */
+  getLastNLines(n: number): string {
+    const lines = this.buffer.split('\n');
+    return lines.slice(-n).join('\n');
+  }
+
+  /**
+   * Clear the buffer
+   */
+  clear(): void {
+    this.buffer = '';
+  }
+
+  /**
+   * Get session ID
+   */
+  getSessionId(): string {
+    return this.sessionId;
+  }
+
+  /**
+   * Format buffer as Markdown for saving to knowledge base
+   */
+  toMarkdown(title?: string): string {
+    const timestamp = new Date().toISOString();
+    const displayTitle = title || `Terminal Output - ${timestamp}`;
+
+    return `# ${displayTitle}
+
+**Session:** ${this.sessionId.slice(0, 8)}
+
+**Captured:** ${timestamp}
+
+## Output
+
+\`\`\`
+${this.buffer}
+\`\`\`
+`;
+  }
+}
+
+// Global buffer store per session
+const bufferStore = new Map<string, TerminalBuffer>();
+
+/**
+ * Get or create a buffer for a session
+ */
+export function getTerminalBuffer(sessionId: string): TerminalBuffer {
+  if (!bufferStore.has(sessionId)) {
+    bufferStore.set(sessionId, new TerminalBuffer(sessionId));
+  }
+  return bufferStore.get(sessionId)!;
+}
+
+/**
+ * Remove buffer for a session
+ */
+export function removeTerminalBuffer(sessionId: string): void {
+  bufferStore.delete(sessionId);
 }
 
 // Terminal API commands
