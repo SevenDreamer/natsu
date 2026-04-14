@@ -6,7 +6,7 @@ import { MainPanel } from './MainPanel';
 import { PreviewPanel } from './PreviewPanel';
 import { MobileDrawer } from './MobileDrawer';
 import { TerminalPanel } from '@/components/terminal/TerminalPanel';
-import { ChatView } from '@/components/chat/ChatView';
+import { ChatView, ConversationList } from '@/components/chat';
 import { useUIStore } from '@/stores/uiStore';
 
 const MOBILE_BREAKPOINT = 768;
@@ -92,8 +92,13 @@ export function AppLayout() {
           </div>
           <PreviewPanel collapsed={!previewOpen} onToggle={togglePreview} />
           {chatOpen && (
-            <div className="w-96 border-l flex-shrink-0">
-              <ChatView />
+            <div className="w-[500px] border-l flex-shrink-0 flex">
+              <div className="w-48 flex-shrink-0">
+                <ConversationList />
+              </div>
+              <div className="flex-1 min-w-0">
+                <ChatView />
+              </div>
             </div>
           )}
         </div>

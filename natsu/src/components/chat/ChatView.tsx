@@ -1,7 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { listen, UnlistenFn } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { ChatMessage } from './ChatMessage';
 import { MessageInput } from './MessageInput';
 import { useChatStore } from '@/stores/chatStore';
@@ -13,10 +12,14 @@ export function ChatView() {
     messages,
     isGenerating,
     currentStreamingId,
+    currentConversationId,
     addMessage,
     appendToMessage,
     setStreaming,
     setGenerating,
+    getContextMessages,
+    saveMessageToDb,
+    createConversation,
   } = useChatStore();
 
   const defaultProvider = useAIStore((s) => s.defaultProvider);
@@ -39,14 +42,21 @@ export function ChatView() {
         }
       });
 
-      const unlistenComplete = await listen<void>('ai-complete', () => {
-        if (currentStreamingId) {
-          setStreaming(currentStreamingId, false);
+      const unlistenComplete = await listen<void>('ai-complete', async () => {
+        const streamingId = currentStreamingId;
+        if (streamingId) {
+          setStreaming(streamingId, false);
+          // Find the message content and save to DB
+          const state = useChatStore.getState();
+          const msg = state.messages.find(m => m.id === streamingId);
+          if (msg && state.currentConversationId) {
+            await state.saveMessageToDb('assistant', msg.content);
+          }
         }
         setGenerating(false);
       });
 
-      const unlistenError = await listen<string>('ai-error', (event) => {
+      const unlistenError = await listen<string>('ai-error', async (event) => {
         console.error('AI Error:', event.payload);
         if (currentStreamingId) {
           setStreaming(currentStreamingId, false);
@@ -70,8 +80,18 @@ export function ChatView() {
 
   const handleSend = useCallback(
     async (content: string) => {
+      // Create a new conversation if none exists
+      let conversationId = currentConversationId;
+      if (!conversationId) {
+        const newConversation = await createConversation();
+        conversationId = newConversation.id;
+      }
+
       // Add user message
       addMessage({ role: 'user', content });
+
+      // Save user message to DB
+      await saveMessageToDb('user', content);
 
       // Add empty assistant message for streaming
       const assistantId = addMessage({
@@ -84,13 +104,10 @@ export function ChatView() {
 
       try {
         // Build context from recent messages
-        const recentMessages = messages.slice(-6).map((m) => ({
-          role: m.role,
-          content: m.content,
-        }));
+        const contextMessages = getContextMessages(10);
         const context =
-          recentMessages.length > 0
-            ? JSON.stringify(recentMessages)
+          contextMessages.length > 0
+            ? JSON.stringify(contextMessages)
             : undefined;
 
         await invoke('ai_stream_completion', {
@@ -105,7 +122,17 @@ export function ChatView() {
         appendToMessage(assistantId, `**Error:** ${String(error)}`);
       }
     },
-    [addMessage, appendToMessage, setStreaming, setGenerating, messages, defaultProvider]
+    [
+      addMessage,
+      appendToMessage,
+      setStreaming,
+      setGenerating,
+      getContextMessages,
+      saveMessageToDb,
+      createConversation,
+      currentConversationId,
+      defaultProvider,
+    ]
   );
 
   const handleStop = useCallback(() => {
@@ -129,7 +156,7 @@ export function ChatView() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 min-h-0" ref={scrollRef}>
+      <div className="flex-1 min-h-0 overflow-auto" ref={scrollRef}>
         {messages.length === 0 ? (
           <div className="h-full flex items-center justify-center text-muted-foreground">
             <div className="text-center max-w-sm">
