@@ -6,9 +6,9 @@ status: complete
 last_updated: "2026-04-14T10:30:00.000Z"
 progress:
   total_phases: 8
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 4
-  completed_plans: 9
+  completed_plans: 13
 ---
 
 # Project State: Natsu (纳兹)
@@ -19,8 +19,8 @@ progress:
 
 ## Current Status
 
-**Phase:** Phase 3 - Terminal Core ✅ Complete
-**Next Phase:** Phase 4 - AI Integration
+**Phase:** Phase 4 - AI Integration ✅ Complete
+**Next Phase:** Phase 5 - AI Knowledge Integration
 
 ---
 
@@ -29,7 +29,7 @@ progress:
 See: .planning/PROJECT.md
 
 **Core value:** AI 自动关联的知识库——存进去，AI 帮你整理、关联、检索
-**Current focus:** Phase 03 — terminal-core
+**Current focus:** Phase 05 — AI Knowledge Integration
 
 ---
 
@@ -40,7 +40,7 @@ See: .planning/PROJECT.md
 | Phase 1: Foundation | ✅ Complete | 100% |
 | Phase 2: Knowledge Advanced | ✅ Complete (UAT pending) | 95% |
 | Phase 3: Terminal Core | ✅ Complete | 100% |
-| Phase 4: AI Integration | Not Started | 0% |
+| Phase 4: AI Integration | ✅ Complete | 100% |
 | Phase 5: AI Knowledge Integration | Not Started | 0% |
 | Phase 6: Automation Core | Not Started | 0% |
 | Phase 7: Automation Advanced | Not Started | 0% |
@@ -54,9 +54,9 @@ See: .planning/PROJECT.md
 |----------|-------|----------|---------|
 | Knowledge Base | 7 | 7 | 0 |
 | Terminal | 4 | 4 | 0 |
-| AI Chat | 8 | 0 | 8 |
+| AI Chat | 8 | 6 | 2 |
 | Automation | 6 | 0 | 6 |
-| **Total** | **25** | **11** | **14** |
+| **Total** | **25** | **17** | **8** |
 
 ### Phase 1 Completed Requirements
 
@@ -78,25 +78,38 @@ See: .planning/PROJECT.md
 - TERM-03: Inline image support ✅
 - TERM-04: Terminal output to knowledge base ✅
 
+### Phase 4 Completed Requirements
+
+- AI-01: Chat with AI through conversation interface ✅
+- AI-02: Select from multiple AI models ✅
+- AI-03: Streaming responses ✅
+- AI-04: Conversation history storage ✅
+- AI-05: AI understands and explains code ✅
+- AI-06: AI maintains conversation context ✅
+
+### Phase 5 Pending Requirements
+
+- AI-07: AI executes terminal commands via tool calling
+- AI-08: AI queries knowledge base to answer questions
+
 ---
 
-## Phase 3 Planning Summary
+## Phase 4 Planning Summary
 
 **Plans Created:** 4
 
 | Plan | Goal | Status |
 |------|------|--------|
-| PLAN-01 | PTY Backend (alacritty_terminal) | ✅ Complete |
-| PLAN-02 | xterm.js Frontend | ✅ Complete |
-| PLAN-03 | Image Support (iTerm2 protocol) | ✅ Complete |
-| PLAN-04 | Knowledge Base Integration | ✅ Complete |
+| PLAN-01 | Chat UI Component | ✅ Complete |
+| PLAN-02 | Conversation History Storage | ✅ Complete |
+| PLAN-03 | Context Management | ✅ Complete |
+| PLAN-04 | Code Understanding | ✅ Complete |
 
 **Key Decisions:**
-
-- D-01: Use alacritty_terminal for PTY
-- D-04: Use xterm.js 5.x for terminal emulation
-- D-06: Prioritize iTerm2 image protocol over Sixel
-- D-08: Save terminal output as Markdown
+- D-01: Message list with Markdown rendering
+- D-03: Reuse Phase 2 Tauri events for streaming
+- D-05: SQLite for conversation storage
+- D-07: Last 10 messages for context
 
 ---
 
@@ -112,6 +125,8 @@ See: .planning/PROJECT.md
 | 2026-04-13 | Zustand 状态管理 | 轻量、简单、持久化支持 |
 | 2026-04-14 | alacritty_terminal PTY | 跨平台、Rust 原生、性能好 |
 | 2026-04-14 | iTerm2 图片协议 | 比 Sixel 简单、广泛支持 |
+| 2026-04-14 | SQLite 对话存储 | 与现有数据库统一、查询高效 |
+| 2026-04-14 | ReactMarkdown + remark-gfm | Markdown 渲染、GFM 支持 |
 
 ---
 
@@ -120,7 +135,8 @@ See: .planning/PROJECT.md
 - ✅ Phase 1 Foundation 完成
 - ✅ Phase 2 Knowledge Advanced 实现 (UAT pending APK)
 - ✅ Phase 3 Terminal Core 完成
-- 📋 准备执行 Phase 4 (AI Integration)
+- ✅ Phase 4 AI Integration 完成
+- 📋 准备执行 Phase 5 (AI Knowledge Integration)
 
 ---
 
