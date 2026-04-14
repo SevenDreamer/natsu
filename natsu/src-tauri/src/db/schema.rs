@@ -153,6 +153,33 @@ CREATE TABLE IF NOT EXISTS scripts (
 );
 
 CREATE INDEX IF NOT EXISTS idx_scripts_name ON scripts(name);
+
+-- File watchers for automation
+CREATE TABLE IF NOT EXISTS file_watchers (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    path TEXT NOT NULL,
+    recursive INTEGER DEFAULT 1,
+    event_types TEXT NOT NULL,
+    enabled INTEGER DEFAULT 1,
+    trigger_script_id TEXT,
+    created_at INTEGER NOT NULL,
+    FOREIGN KEY (trigger_script_id) REFERENCES scripts(id)
+);
+
+-- File events log
+CREATE TABLE IF NOT EXISTS file_events (
+    id TEXT PRIMARY KEY,
+    watcher_id TEXT NOT NULL,
+    event_type TEXT NOT NULL,
+    path TEXT NOT NULL,
+    details TEXT,
+    timestamp INTEGER NOT NULL,
+    FOREIGN KEY (watcher_id) REFERENCES file_watchers(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_file_events_time ON file_events(timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_file_events_watcher ON file_events(watcher_id);
 "#;
 
 pub fn init(conn: &Connection) -> Result<(), String> {

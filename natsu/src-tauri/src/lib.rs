@@ -4,6 +4,7 @@ mod models;
 mod ai;
 mod scheduler;
 mod terminal;
+mod file_watcher;
 
 use commands::{storage, notes, links, search};
 use commands::ai as ai_commands;
@@ -14,6 +15,8 @@ use commands::terminal as terminal_commands;
 use commands::conversation;
 use commands::api as api_commands;
 use commands::script as script_commands;
+use commands::file as file_commands;
+use file_watcher::FileWatcherService;
 use std::sync::{Mutex, Arc};
 use tauri::Manager;
 use ai::tool_manager::ToolManager;
@@ -38,8 +41,12 @@ pub fn run() {
             scheduler::start_scheduler(handle.clone());
 
             // Initialize PTY manager for terminal sessions
-            let pty_manager = terminal_commands::init_pty_manager(handle);
+            let pty_manager = terminal_commands::init_pty_manager(handle.clone());
             app.manage(pty_manager);
+
+            // Initialize file watcher service
+            let watcher_service = Arc::new(Mutex::new(FileWatcherService::new()));
+            app.manage(watcher_service);
 
             // Register tools that need async initialization
             let tm = Arc::clone(&tool_manager);
@@ -140,6 +147,20 @@ pub fn run() {
             script_commands::delete_script,
             script_commands::get_script_safety,
             script_commands::execute_script,
+            // File watcher commands
+            file_commands::list_file_watchers,
+            file_commands::create_file_watcher,
+            file_commands::update_file_watcher,
+            file_commands::delete_file_watcher,
+            file_commands::get_file_events,
+            file_commands::clear_file_events,
+            file_commands::file_copy,
+            file_commands::file_move,
+            file_commands::file_delete,
+            file_commands::file_rename,
+            file_commands::file_exists,
+            file_commands::file_list_dir,
+            file_commands::get_scripts_for_trigger,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

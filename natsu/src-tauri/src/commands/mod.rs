@@ -10,3 +10,4 @@ pub mod terminal;
 pub mod conversation;
 pub mod api;
 pub mod script;
+pub mod file;
