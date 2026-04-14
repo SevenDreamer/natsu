@@ -8,3 +8,4 @@ pub mod graph;
 pub mod wiki;
 pub mod terminal;
 pub mod conversation;
+pub mod api;

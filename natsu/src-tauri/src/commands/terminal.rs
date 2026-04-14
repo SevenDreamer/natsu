@@ -167,54 +167,142 @@ pub fn get_command_history(
     let limit = query.limit.unwrap_or(100);
     let offset = query.offset.unwrap_or(0);
 
-    let mut sql = String::from(
-        "SELECT id, command, working_directory, exit_code, duration_ms, executed_at, session_id \
-         FROM command_history"
-    );
-
-    let mut conditions = Vec::new();
-    let mut params: Vec<Box<dyn rusqlite::ToSql>> = Vec::new();
-
-    // Search filter
-    if let Some(ref search) = query.search {
+    // Build query based on filters
+    let entries = if let Some(ref search) = query.search {
         if !search.is_empty() {
-            conditions.push("command LIKE ?");
-            params.push(Box::new(format!("%{}%", search)));
+            if let Some(ref session_id) = query.session_id {
+                conn.prepare(
+                    "SELECT id, command, working_directory, exit_code, duration_ms, executed_at, session_id \
+                     FROM command_history WHERE command LIKE ?1 AND session_id = ?2 \
+                     ORDER BY executed_at DESC LIMIT ?3 OFFSET ?4"
+                ).map_err(|e| e.to_string())?
+                .query_map(
+                    rusqlite::params![format!("%{}%", search), session_id, limit as i32, offset as i32],
+                    |row| {
+                        Ok(CommandHistoryEntry {
+                            id: row.get(0)?,
+                            command: row.get(1)?,
+                            working_directory: row.get(2)?,
+                            exit_code: row.get(3)?,
+                            duration_ms: row.get(4)?,
+                            executed_at: row.get(5)?,
+                            session_id: row.get(6)?,
+                        })
+                    },
+                ).map_err(|e| e.to_string())?
+                .collect::<Result<Vec<_>, _>>()
+                .map_err(|e| e.to_string())?
+            } else {
+                conn.prepare(
+                    "SELECT id, command, working_directory, exit_code, duration_ms, executed_at, session_id \
+                     FROM command_history WHERE command LIKE ?1 \
+                     ORDER BY executed_at DESC LIMIT ?2 OFFSET ?3"
+                ).map_err(|e| e.to_string())?
+                .query_map(
+                    rusqlite::params![format!("%{}%", search), limit as i32, offset as i32],
+                    |row| {
+                        Ok(CommandHistoryEntry {
+                            id: row.get(0)?,
+                            command: row.get(1)?,
+                            working_directory: row.get(2)?,
+                            exit_code: row.get(3)?,
+                            duration_ms: row.get(4)?,
+                            executed_at: row.get(5)?,
+                            session_id: row.get(6)?,
+                        })
+                    },
+                ).map_err(|e| e.to_string())?
+                .collect::<Result<Vec<_>, _>>()
+                .map_err(|e| e.to_string())?
+            }
+        } else if let Some(ref session_id) = query.session_id {
+            conn.prepare(
+                "SELECT id, command, working_directory, exit_code, duration_ms, executed_at, session_id \
+                 FROM command_history WHERE session_id = ?1 \
+                 ORDER BY executed_at DESC LIMIT ?2 OFFSET ?3"
+            ).map_err(|e| e.to_string())?
+            .query_map(
+                rusqlite::params![session_id, limit as i32, offset as i32],
+                |row| {
+                    Ok(CommandHistoryEntry {
+                        id: row.get(0)?,
+                        command: row.get(1)?,
+                        working_directory: row.get(2)?,
+                        exit_code: row.get(3)?,
+                        duration_ms: row.get(4)?,
+                        executed_at: row.get(5)?,
+                        session_id: row.get(6)?,
+                    })
+                },
+            ).map_err(|e| e.to_string())?
+            .collect::<Result<Vec<_>, _>>()
+            .map_err(|e| e.to_string())?
+        } else {
+            conn.prepare(
+                "SELECT id, command, working_directory, exit_code, duration_ms, executed_at, session_id \
+                 FROM command_history ORDER BY executed_at DESC LIMIT ?1 OFFSET ?2"
+            ).map_err(|e| e.to_string())?
+            .query_map(
+                rusqlite::params![limit as i32, offset as i32],
+                |row| {
+                    Ok(CommandHistoryEntry {
+                        id: row.get(0)?,
+                        command: row.get(1)?,
+                        working_directory: row.get(2)?,
+                        exit_code: row.get(3)?,
+                        duration_ms: row.get(4)?,
+                        executed_at: row.get(5)?,
+                        session_id: row.get(6)?,
+                    })
+                },
+            ).map_err(|e| e.to_string())?
+            .collect::<Result<Vec<_>, _>>()
+            .map_err(|e| e.to_string())?
         }
-    }
-
-    // Session filter
-    if let Some(ref session_id) = query.session_id {
-        conditions.push("session_id = ?");
-        params.push(Box::new(session_id.clone()));
-    }
-
-    if !conditions.is_empty() {
-        sql.push_str(" WHERE ");
-        sql.push_str(&conditions.join(" AND "));
-    }
-
-    sql.push_str(" ORDER BY executed_at DESC LIMIT ? OFFSET ?");
-    params.push(Box::new(limit as i32));
-    params.push(Box::new(offset as i32));
-
-    let mut stmt = conn.prepare(&sql).map_err(|e| e.to_string())?;
-
-    let entries = stmt
-        .query_map(params.as_slice(), |row| {
-            Ok(CommandHistoryEntry {
-                id: row.get(0)?,
-                command: row.get(1)?,
-                working_directory: row.get(2)?,
-                exit_code: row.get(3)?,
-                duration_ms: row.get(4)?,
-                executed_at: row.get(5)?,
-                session_id: row.get(6)?,
-            })
-        })
-        .map_err(|e| e.to_string())?
+    } else if let Some(ref session_id) = query.session_id {
+        conn.prepare(
+            "SELECT id, command, working_directory, exit_code, duration_ms, executed_at, session_id \
+             FROM command_history WHERE session_id = ?1 \
+             ORDER BY executed_at DESC LIMIT ?2 OFFSET ?3"
+        ).map_err(|e| e.to_string())?
+        .query_map(
+            rusqlite::params![session_id, limit as i32, offset as i32],
+            |row| {
+                Ok(CommandHistoryEntry {
+                    id: row.get(0)?,
+                    command: row.get(1)?,
+                    working_directory: row.get(2)?,
+                    exit_code: row.get(3)?,
+                    duration_ms: row.get(4)?,
+                    executed_at: row.get(5)?,
+                    session_id: row.get(6)?,
+                })
+            },
+        ).map_err(|e| e.to_string())?
         .collect::<Result<Vec<_>, _>>()
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| e.to_string())?
+    } else {
+        conn.prepare(
+            "SELECT id, command, working_directory, exit_code, duration_ms, executed_at, session_id \
+             FROM command_history ORDER BY executed_at DESC LIMIT ?1 OFFSET ?2"
+        ).map_err(|e| e.to_string())?
+        .query_map(
+            rusqlite::params![limit as i32, offset as i32],
+            |row| {
+                Ok(CommandHistoryEntry {
+                    id: row.get(0)?,
+                    command: row.get(1)?,
+                    working_directory: row.get(2)?,
+                    exit_code: row.get(3)?,
+                    duration_ms: row.get(4)?,
+                    executed_at: row.get(5)?,
+                    session_id: row.get(6)?,
+                })
+            },
+        ).map_err(|e| e.to_string())?
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(|e| e.to_string())?
+    };
 
     Ok(entries)
 }
@@ -323,8 +411,8 @@ pub fn rerun_command(
     let mut manager = manager.lock().map_err(|e| e.to_string())?;
     let session_id = manager.list().first().cloned();
 
-    if let Some(sid) = session_id {
-        if let Some(session) = manager.get_mut(&sid) {
+    if let Some(ref sid) = session_id {
+        if let Some(session) = manager.get_mut(sid) {
             // Add newline to execute the command
             let cmd_bytes = format!("{}\n", command).into_bytes();
             session.write(&cmd_bytes).map_err(|e| e.to_string())?;

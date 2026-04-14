@@ -7,6 +7,7 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CommandHistory } from './CommandHistory';
+import { ApiCalls } from './ApiCalls';
 import { History, Eye, Code, Webhook } from 'lucide-react';
 
 interface AutomationPanelProps {
@@ -53,10 +54,8 @@ export function AutomationPanel({ onRerunCommand }: AutomationPanelProps) {
         </div>
       </TabsContent>
 
-      <TabsContent value="api" className="flex-1 mt-0">
-        <div className="h-full flex items-center justify-center text-muted-foreground">
-          API 调用功能即将推出 (Phase 6, Plan 04)
-        </div>
+      <TabsContent value="api" className="flex-1 mt-0 overflow-auto">
+        <ApiCalls />
       </TabsContent>
     </Tabs>
   );

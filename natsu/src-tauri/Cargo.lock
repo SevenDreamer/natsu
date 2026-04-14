@@ -2239,6 +2239,7 @@ dependencies = [
  "keyring",
  "lazy_static",
  "mio 0.6.23",
+ "rand 0.8.5",
  "regex",
  "reqwest 0.12.28",
  "rusqlite",

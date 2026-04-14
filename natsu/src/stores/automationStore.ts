@@ -40,6 +40,65 @@ export interface RecordCommandInput {
   session_id?: string;
 }
 
+// API Types
+export interface ApiConfig {
+  id: string;
+  name: string;
+  method: string;
+  url: string;
+  headers?: string;
+  body_template?: string;
+  auth_type: string;
+  auth_config?: string;
+  timeout_secs: number;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface ApiHistoryEntry {
+  id: string;
+  config_id?: string;
+  url: string;
+  method: string;
+  request_headers?: string;
+  request_body?: string;
+  response_status?: number;
+  response_headers?: string;
+  response_body?: string;
+  duration_ms?: number;
+  error?: string;
+  executed_at: number;
+}
+
+export interface ApiResponse {
+  status: number;
+  headers: Record<string, string>;
+  body: string;
+  duration_ms: number;
+}
+
+export interface ExecuteApiInput {
+  config_id?: string;
+  url?: string;
+  method?: string;
+  headers?: string;
+  body?: string;
+  auth_config?: string;
+  timeout_secs?: number;
+  variables?: string;
+}
+
+export interface NewApiConfig {
+  name: string;
+  method: string;
+  url: string;
+  headers?: string;
+  body_template?: string;
+  auth_type?: string;
+  auth_config?: string;
+  timeout_secs?: number;
+}
+
 // ============================================================================
 // Store State
 // ============================================================================
@@ -51,6 +110,12 @@ interface AutomationState {
   historyError: string | null;
   historySearchQuery: string;
 
+  // API Configs
+  apiConfigs: ApiConfig[];
+  apiHistory: ApiHistoryEntry[];
+  apiLoading: boolean;
+  apiError: string | null;
+
   // Actions - Command History
   fetchCommandHistory: (search?: string) => Promise<void>;
   recordCommand: (input: RecordCommandInput) => Promise<CommandHistoryEntry>;
@@ -58,6 +123,13 @@ interface AutomationState {
   clearHistory: () => Promise<void>;
   rerunCommand: (id: string) => Promise<string>;
   setHistorySearchQuery: (query: string) => void;
+
+  // Actions - API
+  fetchApiConfigs: () => Promise<void>;
+  createApiConfig: (config: NewApiConfig) => Promise<ApiConfig>;
+  deleteApiConfig: (id: string) => Promise<void>;
+  executeApi: (input: ExecuteApiInput) => Promise<ApiResponse>;
+  fetchApiHistory: (configId?: string) => Promise<void>;
 }
 
 // ============================================================================
@@ -65,11 +137,17 @@ interface AutomationState {
 // ============================================================================
 
 export const useAutomationStore = create<AutomationState>((set, get) => ({
-  // Initial state
+  // Initial state - Command History
   commandHistory: [],
   historyLoading: false,
   historyError: null,
   historySearchQuery: '',
+
+  // Initial state - API
+  apiConfigs: [],
+  apiHistory: [],
+  apiLoading: false,
+  apiError: null,
 
   // Fetch command history
   fetchCommandHistory: async (search?: string) => {
@@ -129,5 +207,56 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
   // Set search query
   setHistorySearchQuery: (query: string) => {
     set({ historySearchQuery: query });
+  },
+
+  // ============ API Actions ============
+
+  // Fetch API configs
+  fetchApiConfigs: async () => {
+    set({ apiLoading: true, apiError: null });
+    try {
+      const configs = await invoke<ApiConfig[]>('list_api_configs');
+      set({ apiConfigs: configs, apiLoading: false });
+    } catch (error) {
+      set({ apiError: String(error), apiLoading: false });
+    }
+  },
+
+  // Create API config
+  createApiConfig: async (config: NewApiConfig) => {
+    const newConfig = await invoke<ApiConfig>('create_api_config', { input: config });
+    set((state) => ({
+      apiConfigs: [...state.apiConfigs, newConfig],
+    }));
+    return newConfig;
+  },
+
+  // Delete API config
+  deleteApiConfig: async (id: string) => {
+    await invoke('delete_api_config', { id });
+    set((state) => ({
+      apiConfigs: state.apiConfigs.filter((c) => c.id !== id),
+    }));
+  },
+
+  // Execute API request
+  executeApi: async (input: ExecuteApiInput) => {
+    const response = await invoke<ApiResponse>('execute_api_request', { input });
+    // Refresh history after execution
+    get().fetchApiHistory(input.config_id);
+    return response;
+  },
+
+  // Fetch API history
+  fetchApiHistory: async (configId?: string) => {
+    try {
+      const history = await invoke<ApiHistoryEntry[]>('get_api_history', {
+        configId,
+        limit: 50,
+      });
+      set({ apiHistory: history });
+    } catch (error) {
+      console.error('Failed to fetch API history:', error);
+    }
   },
 }));

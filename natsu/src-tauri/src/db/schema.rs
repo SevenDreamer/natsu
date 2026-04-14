@@ -104,6 +104,40 @@ CREATE TABLE IF NOT EXISTS command_history (
 
 CREATE INDEX IF NOT EXISTS idx_command_history_time ON command_history(executed_at DESC);
 CREATE INDEX IF NOT EXISTS idx_command_history_command ON command_history(command);
+
+-- API configurations for automation
+CREATE TABLE IF NOT EXISTS api_configs (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    method TEXT NOT NULL,
+    url TEXT NOT NULL,
+    headers TEXT,
+    body_template TEXT,
+    auth_type TEXT DEFAULT 'none',
+    auth_config TEXT,
+    timeout_secs INTEGER DEFAULT 30,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+);
+
+-- API request history
+CREATE TABLE IF NOT EXISTS api_history (
+    id TEXT PRIMARY KEY,
+    config_id TEXT,
+    url TEXT NOT NULL,
+    method TEXT NOT NULL,
+    request_headers TEXT,
+    request_body TEXT,
+    response_status INTEGER,
+    response_headers TEXT,
+    response_body TEXT,
+    duration_ms INTEGER,
+    error TEXT,
+    executed_at INTEGER NOT NULL,
+    FOREIGN KEY (config_id) REFERENCES api_configs(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_api_history_time ON api_history(executed_at DESC);
 "#;
 
 pub fn init(conn: &Connection) -> Result<(), String> {

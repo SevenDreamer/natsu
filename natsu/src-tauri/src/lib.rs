@@ -12,6 +12,7 @@ use commands::graph;
 use commands::wiki;
 use commands::terminal as terminal_commands;
 use commands::conversation;
+use commands::api as api_commands;
 use std::sync::{Mutex, Arc};
 use tauri::Manager;
 use ai::tool_manager::ToolManager;
@@ -119,6 +120,16 @@ pub fn run() {
             conversation::add_message,
             conversation::delete_conversation,
             conversation::rename_conversation,
+            // API commands
+            api_commands::list_api_configs,
+            api_commands::get_api_config,
+            api_commands::create_api_config,
+            api_commands::update_api_config,
+            api_commands::delete_api_config,
+            api_commands::execute_api_request,
+            api_commands::get_api_history,
+            api_commands::delete_api_history,
+            api_commands::clear_api_history,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
