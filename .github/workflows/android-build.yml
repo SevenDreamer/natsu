@@ -67,21 +67,13 @@ jobs:
           ANDROID_NDK_HOME: ${{ env.ANDROID_SDK_ROOT }}/ndk/26.3.11579264
           NDK_HOME: ${{ env.ANDROID_SDK_ROOT }}/ndk/26.3.11579264
         with:
+          projectPath: natsu
           tagName: ${{ github.ref_name }}
           releaseName: 'Natsu ${{ github.ref_name }}'
           releaseBody: 'See the assets to download this version.'
           releaseDraft: true
           prerelease: false
           args: --target aarch64-linux-android
-
-      - name: Build Android APK (dev)
-        working-directory: natsu
-        env:
-          ANDROID_NDK_HOME: ${{ env.ANDROID_SDK_ROOT }}/ndk/26.3.11579264
-          NDK_HOME: ${{ env.ANDROID_SDK_ROOT }}/ndk/26.3.11579264
-        run: |
-          pnpm tauri android init || true
-          pnpm tauri android build --debug
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -132,7 +124,9 @@ jobs:
 
       - name: Build desktop app
         working-directory: natsu
-        run: pnpm tauri build
+        run: |
+          pnpm add -D @tauri-apps/cli
+          pnpm tauri build
 
       - name: Upload desktop artifacts (Linux)
         if: matrix.os == 'ubuntu-latest'
