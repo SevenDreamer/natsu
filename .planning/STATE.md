@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-last_updated: "2026-04-14T08:20:00.000Z"
+status: complete
+last_updated: "2026-04-14T10:30:00.000Z"
 progress:
   total_phases: 8
-  completed_phases: 2
-  total_plans: 0
-  completed_plans: 0
+  completed_phases: 3
+  total_plans: 4
+  completed_plans: 9
 ---
 
 # Project State: Natsu (纳兹)
@@ -19,8 +19,8 @@ progress:
 
 ## Current Status
 
-**Phase:** Phase 3 - Terminal Core (Planning Complete)
-**Next Phase:** Phase 3 - Terminal Core (Execute)
+**Phase:** Phase 3 - Terminal Core ✅ Complete
+**Next Phase:** Phase 4 - AI Integration
 
 ---
 
@@ -29,7 +29,7 @@ progress:
 See: .planning/PROJECT.md
 
 **Core value:** AI 自动关联的知识库——存进去，AI 帮你整理、关联、检索
-**Current focus:** Phase 03 — Terminal Core
+**Current focus:** Phase 03 — terminal-core
 
 ---
 
@@ -39,7 +39,7 @@ See: .planning/PROJECT.md
 |-------|--------|----------|
 | Phase 1: Foundation | ✅ Complete | 100% |
 | Phase 2: Knowledge Advanced | ✅ Complete (UAT pending) | 95% |
-| Phase 3: Terminal Core | 📋 Planned | 0% |
+| Phase 3: Terminal Core | ✅ Complete | 100% |
 | Phase 4: AI Integration | Not Started | 0% |
 | Phase 5: AI Knowledge Integration | Not Started | 0% |
 | Phase 6: Automation Core | Not Started | 0% |
@@ -53,10 +53,10 @@ See: .planning/PROJECT.md
 | Category | Total | Complete | Pending |
 |----------|-------|----------|---------|
 | Knowledge Base | 7 | 7 | 0 |
-| Terminal | 4 | 0 | 4 |
+| Terminal | 4 | 4 | 0 |
 | AI Chat | 8 | 0 | 8 |
 | Automation | 6 | 0 | 6 |
-| **Total** | **25** | **7** | **18** |
+| **Total** | **25** | **11** | **14** |
 
 ### Phase 1 Completed Requirements
 
@@ -71,6 +71,13 @@ See: .planning/PROJECT.md
 - KNOW-06: Knowledge graph visualization ✅
 - KNOW-07: AI maintains wiki from raw sources ✅
 
+### Phase 3 Completed Requirements
+
+- TERM-01: PTY process management ✅
+- TERM-02: Terminal emulation (xterm.js) ✅
+- TERM-03: Inline image support ✅
+- TERM-04: Terminal output to knowledge base ✅
+
 ---
 
 ## Phase 3 Planning Summary
@@ -79,12 +86,13 @@ See: .planning/PROJECT.md
 
 | Plan | Goal | Status |
 |------|------|--------|
-| PLAN-01 | PTY Backend (alacritty_terminal) | Ready |
-| PLAN-02 | xterm.js Frontend | Ready |
-| PLAN-03 | Image Support (iTerm2 protocol) | Ready |
-| PLAN-04 | Knowledge Base Integration | Ready |
+| PLAN-01 | PTY Backend (alacritty_terminal) | ✅ Complete |
+| PLAN-02 | xterm.js Frontend | ✅ Complete |
+| PLAN-03 | Image Support (iTerm2 protocol) | ✅ Complete |
+| PLAN-04 | Knowledge Base Integration | ✅ Complete |
 
 **Key Decisions:**
+
 - D-01: Use alacritty_terminal for PTY
 - D-04: Use xterm.js 5.x for terminal emulation
 - D-06: Prioritize iTerm2 image protocol over Sixel
@@ -111,9 +119,8 @@ See: .planning/PROJECT.md
 
 - ✅ Phase 1 Foundation 完成
 - ✅ Phase 2 Knowledge Advanced 实现 (UAT pending APK)
-- ✅ Phase 3 Planning 完成
-- 📋 准备执行 Phase 3 (Terminal Core)
-- GitHub CI/CD 正在构建 Android APK
+- ✅ Phase 3 Terminal Core 完成
+- 📋 准备执行 Phase 4 (AI Integration)
 
 ---
 
