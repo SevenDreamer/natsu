@@ -1,4 +1,5 @@
-use crate::ai::provider::{AIProvider, AIError, ProviderConfig, StreamResult};
+use crate::ai::provider::{AIProvider, AIError, ProviderConfig, StreamResult, StreamContentResult, AIResponse};
+use crate::ai::tool::{Message as ToolMessage, ToolDefinition};
 use async_trait::async_trait;
 use futures::{Stream, StreamExt};
 use reqwest::Client;
@@ -131,6 +132,24 @@ impl AIProvider for OpenAIProvider {
 
     fn is_configured(&self) -> bool {
         !self.api_key.is_empty()
+    }
+
+    async fn stream_completion_with_tools(
+        &self,
+        _messages: &[ToolMessage],
+        _tools: &[ToolDefinition],
+    ) -> Result<StreamContentResult, AIError> {
+        // TODO: Implement OpenAI tools support
+        Err(AIError::ApiError("Tool calling not yet implemented for OpenAI provider".to_string()))
+    }
+
+    async fn complete_with_tools(
+        &self,
+        _messages: &[ToolMessage],
+        _tools: &[ToolDefinition],
+    ) -> Result<AIResponse, AIError> {
+        // TODO: Implement OpenAI tools support
+        Err(AIError::ApiError("Tool calling not yet implemented for OpenAI provider".to_string()))
     }
 }
 

@@ -12,19 +12,23 @@ use commands::graph;
 use commands::wiki;
 use commands::terminal as terminal_commands;
 use commands::conversation;
-use std::sync::Mutex;
+use std::sync::{Mutex, Arc};
 use tauri::Manager;
-use rusqlite::Connection;
+use ai::tool_manager::ToolManager;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let db = db::init_database().expect("Failed to init database");
+
+    // Initialize tool manager
+    let tool_manager = Arc::new(ToolManager::new());
 
     tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
         .manage(Mutex::new(db))
+        .manage(tool_manager)
         .setup(|app| {
             let handle = app.handle().clone();
             scheduler::start_scheduler(handle.clone());
@@ -63,6 +67,11 @@ pub fn run() {
             ai_commands::list_providers,
             ai_commands::ai_stream_completion,
             ai_commands::ai_complete,
+            ai_commands::ai_chat_with_tools,
+            ai_commands::confirm_tool_execution,
+            ai_commands::ai_stream_chat_with_tools,
+            ai_commands::get_registered_tools,
+            ai_commands::register_tool,
             // Relations commands
             relations::get_related_notes,
             relations::get_relationship_analysis,

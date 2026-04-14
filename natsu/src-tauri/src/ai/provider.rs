@@ -7,6 +7,7 @@ use super::claude::ClaudeProvider;
 use super::openai::OpenAIProvider;
 use super::deepseek::DeepSeekProvider;
 use super::ollama::OllamaProvider;
+use super::tool::{ContentBlock, Message, ToolDefinition};
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum ProviderType {
@@ -34,9 +35,35 @@ pub enum AIError {
     AuthError(String),
     #[error("Keyring error: {0}")]
     KeyringError(String),
+    #[error("Tool execution error: {0}")]
+    ToolError(String),
+    #[error("Parse error: {0}")]
+    ParseError(String),
 }
 
 pub type StreamResult = Pin<Box<dyn Stream<Item = Result<String, AIError>> + Send>>;
+
+/// Result type for streaming with content blocks (supports tools)
+pub type StreamContentResult = Pin<Box<dyn Stream<Item = Result<ContentBlock, AIError>> + Send>>;
+
+/// Response from AI that may contain tool use requests
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AIResponse {
+    /// Content blocks from the response
+    pub content: Vec<ContentBlock>,
+    /// Stop reason: "end_turn", "tool_use", "max_tokens"
+    pub stop_reason: String,
+    /// Usage information
+    #[serde(default)]
+    pub usage: Option<UsageInfo>,
+}
+
+/// Usage information for token counting
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UsageInfo {
+    pub input_tokens: u32,
+    pub output_tokens: u32,
+}
 
 #[async_trait]
 pub trait AIProvider: Send + Sync {
@@ -53,6 +80,21 @@ pub trait AIProvider: Send + Sync {
         prompt: &str,
         context: Option<&str>,
     ) -> Result<String, AIError>;
+
+    /// Stream completion with tool support
+    /// Returns content blocks that may include tool_use
+    async fn stream_completion_with_tools(
+        &self,
+        messages: &[Message],
+        tools: &[ToolDefinition],
+    ) -> Result<StreamContentResult, AIError>;
+
+    /// Single completion with tool support
+    async fn complete_with_tools(
+        &self,
+        messages: &[Message],
+        tools: &[ToolDefinition],
+    ) -> Result<AIResponse, AIError>;
 
     /// Get provider name
     fn name(&self) -> &str;
