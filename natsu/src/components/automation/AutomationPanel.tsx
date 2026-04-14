@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CommandHistory } from './CommandHistory';
 import { ApiCalls } from './ApiCalls';
+import { ScriptLibrary } from './ScriptLibrary';
 import { History, Eye, Code, Webhook } from 'lucide-react';
 
 interface AutomationPanelProps {
@@ -42,10 +43,8 @@ export function AutomationPanel({ onRerunCommand }: AutomationPanelProps) {
         <CommandHistory onRerun={onRerunCommand} />
       </TabsContent>
 
-      <TabsContent value="scripts" className="flex-1 mt-0">
-        <div className="h-full flex items-center justify-center text-muted-foreground">
-          脚本库功能即将推出 (Phase 6, Plan 02)
-        </div>
+      <TabsContent value="scripts" className="flex-1 mt-0 overflow-hidden">
+        <ScriptLibrary />
       </TabsContent>
 
       <TabsContent value="files" className="flex-1 mt-0">

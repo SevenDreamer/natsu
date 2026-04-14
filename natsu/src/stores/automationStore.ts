@@ -99,6 +99,61 @@ export interface NewApiConfig {
   timeout_secs?: number;
 }
 
+// Script Types
+export interface ScriptParameter {
+  name: string;
+  description?: string;
+  default_value?: string;
+  required: boolean;
+}
+
+export interface Script {
+  id: string;
+  name: string;
+  description?: string;
+  script_path: string;
+  interpreter: string;
+  tags: string[];
+  parameters: ScriptParameter[];
+  created_at: number;
+  updated_at: number;
+}
+
+export interface ScriptSafetyInfo {
+  level: 'safe' | 'caution' | 'dangerous';
+  warnings: string[];
+}
+
+export interface ScriptExecutionResult {
+  exit_code: number;
+  stdout: string;
+  stderr: string;
+  duration_ms: number;
+}
+
+export interface CreateScriptInput {
+  name: string;
+  description?: string;
+  content: string;
+  interpreter?: string;
+  tags?: string[];
+  parameters?: ScriptParameter[];
+}
+
+export interface UpdateScriptInput {
+  name?: string;
+  description?: string;
+  content?: string;
+  tags?: string[];
+  parameters?: ScriptParameter[];
+}
+
+export interface ScriptExecutionInput {
+  script_id: string;
+  parameters?: Record<string, string>;
+  timeout?: number;
+}
+
 // ============================================================================
 // Store State
 // ============================================================================
@@ -116,6 +171,11 @@ interface AutomationState {
   apiLoading: boolean;
   apiError: string | null;
 
+  // Scripts
+  scripts: Script[];
+  scriptsLoading: boolean;
+  scriptsError: string | null;
+
   // Actions - Command History
   fetchCommandHistory: (search?: string) => Promise<void>;
   recordCommand: (input: RecordCommandInput) => Promise<CommandHistoryEntry>;
@@ -130,6 +190,15 @@ interface AutomationState {
   deleteApiConfig: (id: string) => Promise<void>;
   executeApi: (input: ExecuteApiInput) => Promise<ApiResponse>;
   fetchApiHistory: (configId?: string) => Promise<void>;
+
+  // Actions - Scripts
+  fetchScripts: () => Promise<void>;
+  createScript: (input: CreateScriptInput) => Promise<Script>;
+  updateScript: (id: string, input: UpdateScriptInput) => Promise<Script>;
+  deleteScript: (id: string) => Promise<void>;
+  getScriptContent: (id: string) => Promise<string>;
+  getScriptSafety: (id: string) => Promise<ScriptSafetyInfo>;
+  executeScript: (input: ScriptExecutionInput) => Promise<ScriptExecutionResult>;
 }
 
 // ============================================================================
@@ -148,6 +217,11 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
   apiHistory: [],
   apiLoading: false,
   apiError: null,
+
+  // Initial state - Scripts
+  scripts: [],
+  scriptsLoading: false,
+  scriptsError: null,
 
   // Fetch command history
   fetchCommandHistory: async (search?: string) => {
@@ -258,5 +332,59 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     } catch (error) {
       console.error('Failed to fetch API history:', error);
     }
+  },
+
+  // ============ Script Actions ============
+
+  // Fetch scripts
+  fetchScripts: async () => {
+    set({ scriptsLoading: true, scriptsError: null });
+    try {
+      const scripts = await invoke<Script[]>('list_scripts');
+      set({ scripts, scriptsLoading: false });
+    } catch (error) {
+      set({ scriptsError: String(error), scriptsLoading: false });
+    }
+  },
+
+  // Create script
+  createScript: async (input: CreateScriptInput) => {
+    const script = await invoke<Script>('create_script', { input });
+    set((state) => ({
+      scripts: [...state.scripts, script],
+    }));
+    return script;
+  },
+
+  // Update script
+  updateScript: async (id: string, input: UpdateScriptInput) => {
+    const script = await invoke<Script>('update_script', { id, input });
+    set((state) => ({
+      scripts: state.scripts.map((s) => (s.id === id ? script : s)),
+    }));
+    return script;
+  },
+
+  // Delete script
+  deleteScript: async (id: string) => {
+    await invoke('delete_script', { id });
+    set((state) => ({
+      scripts: state.scripts.filter((s) => s.id !== id),
+    }));
+  },
+
+  // Get script content
+  getScriptContent: async (id: string) => {
+    return await invoke<string>('get_script_content', { id });
+  },
+
+  // Get script safety
+  getScriptSafety: async (id: string) => {
+    return await invoke<ScriptSafetyInfo>('get_script_safety', { id });
+  },
+
+  // Execute script
+  executeScript: async (input: ScriptExecutionInput) => {
+    return await invoke<ScriptExecutionResult>('execute_script', { input });
   },
 }));
