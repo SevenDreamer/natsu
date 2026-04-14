@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: complete
-last_updated: "2026-04-14T11:30:00.000Z"
+status: planning
+last_updated: "2026-04-14T11:10:00.000Z"
 progress:
   total_phases: 8
   completed_phases: 5
@@ -19,8 +19,8 @@ progress:
 
 ## Current Status
 
-**Phase:** Phase 5 - AI Knowledge Integration ✅ Complete
-**Next Phase:** Phase 6 - Automation Core
+**Phase:** Phase 6 - Automation Core 📋 Planned
+**Next Phase:** Execute Phase 6
 
 ---
 
@@ -42,7 +42,7 @@ See: .planning/PROJECT.md
 | Phase 3: Terminal Core | ✅ Complete | 100% |
 | Phase 4: AI Integration | ✅ Complete | 100% |
 | Phase 5: AI Knowledge Integration | ✅ Complete | 100% |
-| Phase 6: Automation Core | Not Started | 0% |
+| Phase 6: Automation Core | 📋 Planned | 0% |
 | Phase 7: Automation Advanced | Not Started | 0% |
 | Phase 8: Polish & Release | Not Started | 0% |
 
@@ -132,6 +132,23 @@ See: .planning/PROJECT.md
 
 ---
 
+## Phase 6 Planning Summary
+
+**Plans Created:** 4
+
+| Plan | Goal | Status |
+|------|------|--------|
+| PLAN-01 | Command History | 📋 Planned |
+| PLAN-02 | Script Library | 📋 Planned |
+| PLAN-03 | File Monitoring | 📋 Planned |
+| PLAN-04 | API Calls | 📋 Planned |
+
+**Wave Structure:**
+- Wave 1: PLAN-01 (Command History), PLAN-04 (API Calls)
+- Wave 2: PLAN-02 (Script Library), PLAN-03 (File Monitoring)
+
+---
+
 ## Notes
 
 - ✅ Phase 1 Foundation 完成
@@ -139,7 +156,7 @@ See: .planning/PROJECT.md
 - ✅ Phase 3 Terminal Core 完成
 - ✅ Phase 4 AI Integration 完成
 - ✅ Phase 5 AI Knowledge Integration 完成
-- 📋 准备执行 Phase 6 (Automation Core)
+- 📋 Phase 6 Automation Core 已规划，待执行
 
 ---
 
