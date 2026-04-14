@@ -5,6 +5,7 @@ mod ai;
 mod scheduler;
 mod terminal;
 mod file_watcher;
+mod platform;
 
 use commands::{storage, notes, links, search};
 use commands::ai as ai_commands;
@@ -17,6 +18,7 @@ use commands::api as api_commands;
 use commands::script as script_commands;
 use commands::file as file_commands;
 use commands::scheduled_task as scheduled_task_commands;
+use commands::android as android_commands;
 use file_watcher::FileWatcherService;
 use std::sync::{Mutex, Arc};
 use tauri::Manager;
@@ -173,6 +175,19 @@ pub fn run() {
             scheduled_task_commands::get_task_executions,
             scheduled_task_commands::get_recent_task_executions,
             scheduled_task_commands::validate_cron_expression_cmd,
+            // Android platform commands
+            android_commands::get_platform,
+            android_commands::check_is_android,
+            android_commands::get_android_feature_availability,
+            android_commands::get_bluetooth_status,
+            android_commands::set_bluetooth,
+            android_commands::get_wifi_status,
+            android_commands::set_wifi,
+            android_commands::get_brightness,
+            android_commands::set_brightness,
+            android_commands::get_volume,
+            android_commands::set_volume,
+            android_commands::set_mute,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
