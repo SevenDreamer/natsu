@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-04-13T16:43:29.186Z"
+status: planning
+last_updated: "2026-04-14T08:20:00.000Z"
 progress:
   total_phases: 8
-  completed_phases: 0
+  completed_phases: 2
   total_plans: 0
   completed_plans: 0
 ---
 
-# Project State: TermSuite
+# Project State: Natsu (纳兹)
 
 **Last Updated:** 2026-04-14
 
@@ -19,17 +19,17 @@ progress:
 
 ## Current Status
 
-**Phase:** Phase 2 - Knowledge Advanced (Planned)
-**Next Phase:** Phase 2 - Knowledge Advanced (Execute)
+**Phase:** Phase 3 - Terminal Core (Planning Complete)
+**Next Phase:** Phase 3 - Terminal Core (Execute)
 
 ---
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-13)
+See: .planning/PROJECT.md
 
 **Core value:** AI 自动关联的知识库——存进去，AI 帮你整理、关联、检索
-**Current focus:** Phase 02 — Knowledge Advanced
+**Current focus:** Phase 03 — Terminal Core
 
 ---
 
@@ -38,8 +38,8 @@ See: .planning/PROJECT.md (updated 2026-04-13)
 | Phase | Status | Progress |
 |-------|--------|----------|
 | Phase 1: Foundation | ✅ Complete | 100% |
-| Phase 2: Knowledge Advanced | 📋 Planned | 0% |
-| Phase 3: Terminal Core | Not Started | 0% |
+| Phase 2: Knowledge Advanced | ✅ Complete (UAT pending) | 95% |
+| Phase 3: Terminal Core | 📋 Planned | 0% |
 | Phase 4: AI Integration | Not Started | 0% |
 | Phase 5: AI Knowledge Integration | Not Started | 0% |
 | Phase 6: Automation Core | Not Started | 0% |
@@ -52,11 +52,11 @@ See: .planning/PROJECT.md (updated 2026-04-13)
 
 | Category | Total | Complete | Pending |
 |----------|-------|----------|---------|
-| Knowledge Base | 7 | 4 | 3 |
+| Knowledge Base | 7 | 7 | 0 |
 | Terminal | 4 | 0 | 4 |
 | AI Chat | 8 | 0 | 8 |
 | Automation | 6 | 0 | 6 |
-| **Total** | **25** | **4** | **21** |
+| **Total** | **25** | **7** | **18** |
 
 ### Phase 1 Completed Requirements
 
@@ -64,6 +64,31 @@ See: .planning/PROJECT.md (updated 2026-04-13)
 - KNOW-02: Bi-directional wiki links ✅
 - KNOW-03: Full-text search ✅
 - KNOW-04: raw/wiki/outputs directory structure ✅
+
+### Phase 2 Completed Requirements
+
+- KNOW-05: AI discovers note relationships ✅
+- KNOW-06: Knowledge graph visualization ✅
+- KNOW-07: AI maintains wiki from raw sources ✅
+
+---
+
+## Phase 3 Planning Summary
+
+**Plans Created:** 4
+
+| Plan | Goal | Status |
+|------|------|--------|
+| PLAN-01 | PTY Backend (alacritty_terminal) | Ready |
+| PLAN-02 | xterm.js Frontend | Ready |
+| PLAN-03 | Image Support (iTerm2 protocol) | Ready |
+| PLAN-04 | Knowledge Base Integration | Ready |
+
+**Key Decisions:**
+- D-01: Use alacritty_terminal for PTY
+- D-04: Use xterm.js 5.x for terminal emulation
+- D-06: Prioritize iTerm2 image protocol over Sixel
+- D-08: Save terminal output as Markdown
 
 ---
 
@@ -77,23 +102,19 @@ See: .planning/PROJECT.md (updated 2026-04-13)
 | 2026-04-13 | 多模型 Provider 抽象 | 支持多 AI 模型、易扩展 |
 | 2026-04-13 | shadcn/ui 组件库 | 现代化、可定制、Tailwind 集成 |
 | 2026-04-13 | Zustand 状态管理 | 轻量、简单、持久化支持 |
+| 2026-04-14 | alacritty_terminal PTY | 跨平台、Rust 原生、性能好 |
+| 2026-04-14 | iTerm2 图片协议 | 比 Sixel 简单、广泛支持 |
 
 ---
 
 ## Notes
 
 - ✅ Phase 1 Foundation 完成
-- ✅ Tauri 2.x 项目结构建立
-- ✅ Rust 后端命令实现
-- ✅ React 前端组件
-- ✅ 响应式三栏布局
-- ✅ Wiki-link 解析
-- ✅ FTS5 全文搜索
-- ✅ 27 个测试全部通过
-- ✅ Phase 2 Planning 完成
-  - 5 plans across 4 waves
-  - KNOW-05, KNOW-06, KNOW-07 全部覆盖
-- 准备执行 Phase 2 (Knowledge Advanced)
+- ✅ Phase 2 Knowledge Advanced 实现 (UAT pending APK)
+- ✅ Phase 3 Planning 完成
+- 📋 准备执行 Phase 3 (Terminal Core)
+- GitHub CI/CD 正在构建 Android APK
 
 ---
+
 *State updated: 2026-04-14*
