@@ -1,11 +1,17 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { listen, UnlistenFn } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
 import { ChatMessage } from './ChatMessage';
 import { MessageInput } from './MessageInput';
 import { useChatStore } from '@/stores/chatStore';
 import { useAIStore } from '@/stores/aiStore';
-import { Bot, MessageSquare } from 'lucide-react';
+import {
+  getSelectedCode,
+  clearSelectedCode,
+  formatForAI,
+  CodeContext,
+} from '@/lib/codeContext';
+import { Bot, MessageSquare, Code, X } from 'lucide-react';
 
 export function ChatView() {
   const {
@@ -26,12 +32,25 @@ export function ChatView() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const unlistenRef = useRef<UnlistenFn[]>([]);
 
+  // Code context state
+  const [pendingCodeContext, setPendingCodeContext] = useState<CodeContext | null>(null);
+
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  // Check for pending code context on mount
+  useEffect(() => {
+    const codeContext = getSelectedCode();
+    if (codeContext) {
+      setPendingCodeContext(codeContext);
+      // Clear the global state so it doesn't persist
+      clearSelectedCode();
+    }
+  }, []);
 
   // Set up event listeners for streaming responses
   useEffect(() => {
@@ -144,6 +163,20 @@ export function ChatView() {
     }
   }, [currentStreamingId, setGenerating, setStreaming]);
 
+  // Handle explaining selected code
+  const handleExplainCode = useCallback(async () => {
+    if (!pendingCodeContext) return;
+
+    const prompt = formatForAI(pendingCodeContext);
+    setPendingCodeContext(null);
+    await handleSend(prompt);
+  }, [pendingCodeContext, handleSend]);
+
+  // Handle dismissing the code context banner
+  const handleDismissCodeContext = useCallback(() => {
+    setPendingCodeContext(null);
+  }, []);
+
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
@@ -154,6 +187,51 @@ export function ChatView() {
           ({defaultProvider})
         </span>
       </div>
+
+      {/* Code Context Banner */}
+      {pendingCodeContext && (
+        <div className="px-4 py-3 border-b bg-primary/5">
+          <div className="flex items-start gap-3">
+            <Code className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium">Code Selected</p>
+              <p className="text-xs text-muted-foreground mt-1 truncate">
+                {pendingCodeContext.filename
+                  ? `${pendingCodeContext.filename} (lines ${pendingCodeContext.lineStart}-${pendingCodeContext.lineEnd})`
+                  : `Lines ${pendingCodeContext.lineStart}-${pendingCodeContext.lineEnd}`}
+              </p>
+              <pre className="mt-2 text-xs bg-muted p-2 rounded overflow-x-auto max-h-24">
+                <code className="text-muted-foreground">
+                  {pendingCodeContext.code.length > 200
+                    ? pendingCodeContext.code.slice(0, 200) + '...'
+                    : pendingCodeContext.code}
+                </code>
+              </pre>
+              <div className="flex gap-2 mt-2">
+                <button
+                  onClick={handleExplainCode}
+                  disabled={isGenerating}
+                  className="px-3 py-1 text-xs bg-primary text-primary-foreground rounded hover:bg-primary/90 disabled:opacity-50"
+                >
+                  Explain
+                </button>
+                <button
+                  onClick={handleDismissCodeContext}
+                  className="px-3 py-1 text-xs border rounded hover:bg-accent"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+            <button
+              onClick={handleDismissCodeContext}
+              className="p-1 hover:bg-accent rounded"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Messages */}
       <div className="flex-1 min-h-0 overflow-auto" ref={scrollRef}>
