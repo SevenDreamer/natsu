@@ -6,6 +6,7 @@ import { MainPanel } from './MainPanel';
 import { PreviewPanel } from './PreviewPanel';
 import { MobileDrawer } from './MobileDrawer';
 import { TerminalPanel } from '@/components/terminal/TerminalPanel';
+import { ChatView } from '@/components/chat/ChatView';
 import { useUIStore } from '@/stores/uiStore';
 
 const MOBILE_BREAKPOINT = 768;
@@ -18,6 +19,7 @@ export function AppLayout() {
   const previewOpen = useUIStore((s) => s.previewOpen);
   const drawerOpen = useUIStore((s) => s.drawerOpen);
   const terminalOpen = useUIStore((s) => s.terminalOpen);
+  const chatOpen = useUIStore((s) => s.chatOpen);
   const setMobile = useUIStore((s) => s.setMobile);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
   const togglePreview = useUIStore((s) => s.togglePreview);
@@ -89,6 +91,11 @@ export function AppLayout() {
             <MainPanel />
           </div>
           <PreviewPanel collapsed={!previewOpen} onToggle={togglePreview} />
+          {chatOpen && (
+            <div className="w-96 border-l flex-shrink-0">
+              <ChatView />
+            </div>
+          )}
         </div>
         {terminalOpen && (
           <TerminalPanel className="shrink-0" />

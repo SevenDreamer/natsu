@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Settings, PanelLeftClose, PanelLeft, Network } from 'lucide-react';
+import { Settings, PanelLeftClose, PanelLeft, Network, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
 import { FileTree } from '@/components/navigation/FileTree';
 import { GraphView } from '@/components/graph/GraphView';
+import { useUIStore } from '@/stores/uiStore';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -12,6 +13,8 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const [showGraph, setShowGraph] = useState(false);
+  const toggleChat = useUIStore((s) => s.toggleChat);
+  const chatOpen = useUIStore((s) => s.chatOpen);
 
   if (collapsed) {
     return (
@@ -41,6 +44,15 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
         <Separator />
         <div className="p-2 space-y-1">
+          <Button
+            variant={chatOpen ? 'secondary' : 'ghost'}
+            size="sm"
+            className="w-full justify-start"
+            onClick={toggleChat}
+          >
+            <MessageSquare className="mr-2 h-4 w-4" />
+            AI Chat
+          </Button>
           <Button
             variant="ghost"
             size="sm"
