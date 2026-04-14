@@ -9,3 +9,4 @@ pub mod wiki;
 pub mod terminal;
 pub mod conversation;
 pub mod api;
+pub mod script;

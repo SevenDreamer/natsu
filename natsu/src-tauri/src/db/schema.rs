@@ -138,6 +138,21 @@ CREATE TABLE IF NOT EXISTS api_history (
 );
 
 CREATE INDEX IF NOT EXISTS idx_api_history_time ON api_history(executed_at DESC);
+
+-- Scripts table for script library
+CREATE TABLE IF NOT EXISTS scripts (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT,
+    script_path TEXT NOT NULL,
+    interpreter TEXT DEFAULT 'bash',
+    tags TEXT,
+    parameters TEXT,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_scripts_name ON scripts(name);
 "#;
 
 pub fn init(conn: &Connection) -> Result<(), String> {
