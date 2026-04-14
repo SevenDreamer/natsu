@@ -16,6 +16,7 @@ use commands::conversation;
 use commands::api as api_commands;
 use commands::script as script_commands;
 use commands::file as file_commands;
+use commands::scheduled_task as scheduled_task_commands;
 use file_watcher::FileWatcherService;
 use std::sync::{Mutex, Arc};
 use tauri::Manager;
@@ -34,6 +35,7 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_notification::init())
         .manage(Arc::clone(&db_arc))
         .manage(Arc::clone(&tool_manager))
         .setup(move |app| {
@@ -161,6 +163,16 @@ pub fn run() {
             file_commands::file_exists,
             file_commands::file_list_dir,
             file_commands::get_scripts_for_trigger,
+            // Scheduled task commands
+            scheduled_task_commands::list_scheduled_tasks,
+            scheduled_task_commands::create_scheduled_task,
+            scheduled_task_commands::update_scheduled_task,
+            scheduled_task_commands::delete_scheduled_task,
+            scheduled_task_commands::toggle_scheduled_task,
+            scheduled_task_commands::run_task_now,
+            scheduled_task_commands::get_task_executions,
+            scheduled_task_commands::get_recent_task_executions,
+            scheduled_task_commands::validate_cron_expression_cmd,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

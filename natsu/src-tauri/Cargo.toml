@@ -44,3 +44,13 @@ rand = "0.8"
 
 # File watching
 notify = "6"
+
+# Cron expression parsing (for scheduled tasks)
+cron = "0.12"
+
+# Tauri notification plugin
+tauri-plugin-notification = "2"
+
+# Android JNI support (for Android target only)
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.21"

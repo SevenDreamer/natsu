@@ -180,6 +180,47 @@ CREATE TABLE IF NOT EXISTS file_events (
 
 CREATE INDEX IF NOT EXISTS idx_file_events_time ON file_events(timestamp DESC);
 CREATE INDEX IF NOT EXISTS idx_file_events_watcher ON file_events(watcher_id);
+
+-- Scheduled tasks table (AUTO-05)
+CREATE TABLE IF NOT EXISTS scheduled_tasks (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT,
+    schedule_type TEXT NOT NULL,  -- 'simple', 'cron', 'once'
+    schedule_config TEXT NOT NULL, -- JSON: interval_secs or cron_expression
+    task_type TEXT NOT NULL,       -- 'script', 'command', 'api'
+    task_config TEXT NOT NULL,     -- JSON: script_id, command, or api_config
+    retry_config TEXT,             -- JSON: max_retries, retry_interval_secs, backoff_multiplier
+    enabled INTEGER DEFAULT 1,
+    last_run_at INTEGER,
+    next_run_at INTEGER,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_scheduled_tasks_enabled ON scheduled_tasks(enabled);
+CREATE INDEX IF NOT EXISTS idx_scheduled_tasks_next_run ON scheduled_tasks(next_run_at);
+
+-- Task execution history (AUTO-05)
+CREATE TABLE IF NOT EXISTS task_executions (
+    id TEXT PRIMARY KEY,
+    task_id TEXT NOT NULL,
+    scheduled_time INTEGER NOT NULL,
+    started_at INTEGER,
+    completed_at INTEGER,
+    status TEXT NOT NULL,  -- 'pending', 'running', 'success', 'failed', 'cancelled'
+    exit_code INTEGER,
+    stdout TEXT,
+    stderr TEXT,
+    error_message TEXT,
+    duration_ms INTEGER,
+    retry_count INTEGER DEFAULT 0,
+    FOREIGN KEY (task_id) REFERENCES scheduled_tasks(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_task_executions_task ON task_executions(task_id);
+CREATE INDEX IF NOT EXISTS idx_task_executions_time ON task_executions(scheduled_time DESC);
+CREATE INDEX IF NOT EXISTS idx_task_executions_status ON task_executions(status);
 "#;
 
 pub fn init(conn: &Connection) -> Result<(), String> {
