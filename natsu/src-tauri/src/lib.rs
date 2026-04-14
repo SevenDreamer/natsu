@@ -105,6 +105,13 @@ pub fn run() {
             terminal_commands::kill_terminal,
             terminal_commands::get_terminal_content,
             terminal_commands::list_terminals,
+            // Command history
+            terminal_commands::get_command_history,
+            terminal_commands::record_command,
+            terminal_commands::update_command_result,
+            terminal_commands::delete_command_history_entry,
+            terminal_commands::clear_command_history,
+            terminal_commands::rerun_command,
             // Conversation commands
             conversation::create_conversation,
             conversation::list_conversations,

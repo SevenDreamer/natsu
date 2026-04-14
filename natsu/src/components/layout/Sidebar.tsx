@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Settings, PanelLeftClose, PanelLeft, Network, MessageSquare } from 'lucide-react';
+import { Settings, PanelLeftClose, PanelLeft, Network, MessageSquare, Zap } from 'lucide-react';
 import { useState } from 'react';
 import { FileTree } from '@/components/navigation/FileTree';
 import { GraphView } from '@/components/graph/GraphView';
@@ -14,7 +14,9 @@ interface SidebarProps {
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const [showGraph, setShowGraph] = useState(false);
   const toggleChat = useUIStore((s) => s.toggleChat);
+  const toggleAutomation = useUIStore((s) => s.toggleAutomation);
   const chatOpen = useUIStore((s) => s.chatOpen);
+  const automationOpen = useUIStore((s) => s.automationOpen);
 
   if (collapsed) {
     return (
@@ -52,6 +54,15 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           >
             <MessageSquare className="mr-2 h-4 w-4" />
             AI Chat
+          </Button>
+          <Button
+            variant={automationOpen ? 'secondary' : 'ghost'}
+            size="sm"
+            className="w-full justify-start"
+            onClick={toggleAutomation}
+          >
+            <Zap className="mr-2 h-4 w-4" />
+            自动化
           </Button>
           <Button
             variant="ghost"

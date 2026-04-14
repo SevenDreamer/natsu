@@ -7,6 +7,7 @@ import { PreviewPanel } from './PreviewPanel';
 import { MobileDrawer } from './MobileDrawer';
 import { TerminalPanel } from '@/components/terminal/TerminalPanel';
 import { ChatView, ConversationList } from '@/components/chat';
+import { AutomationPanel } from '@/components/automation/AutomationPanel';
 import { useUIStore } from '@/stores/uiStore';
 
 const MOBILE_BREAKPOINT = 768;
@@ -20,6 +21,7 @@ export function AppLayout() {
   const drawerOpen = useUIStore((s) => s.drawerOpen);
   const terminalOpen = useUIStore((s) => s.terminalOpen);
   const chatOpen = useUIStore((s) => s.chatOpen);
+  const automationOpen = useUIStore((s) => s.automationOpen);
   const setMobile = useUIStore((s) => s.setMobile);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
   const togglePreview = useUIStore((s) => s.togglePreview);
@@ -99,6 +101,11 @@ export function AppLayout() {
               <div className="flex-1 min-w-0">
                 <ChatView />
               </div>
+            </div>
+          )}
+          {automationOpen && (
+            <div className="w-[400px] border-l flex-shrink-0 p-4">
+              <AutomationPanel />
             </div>
           )}
         </div>

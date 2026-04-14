@@ -90,6 +90,20 @@ CREATE TABLE IF NOT EXISTS messages (
 );
 
 CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(conversation_id);
+
+-- Command history for automation
+CREATE TABLE IF NOT EXISTS command_history (
+    id TEXT PRIMARY KEY,
+    command TEXT NOT NULL,
+    working_directory TEXT,
+    exit_code INTEGER,
+    duration_ms INTEGER,
+    executed_at INTEGER NOT NULL,
+    session_id TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_command_history_time ON command_history(executed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_command_history_command ON command_history(command);
 "#;
 
 pub fn init(conn: &Connection) -> Result<(), String> {
