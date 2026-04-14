@@ -192,6 +192,104 @@ export interface FileInfo {
 }
 
 // ============================================================================
+// Scheduled Task Types
+// ============================================================================
+
+export interface SimpleInterval {
+  interval_secs: number;
+  start_time?: number;
+}
+
+export interface CronSchedule {
+  expression: string;
+  timezone: string;
+}
+
+export interface OnceTime {
+  execute_at: number;
+}
+
+export interface ScriptTaskConfig {
+  script_id: string;
+  parameters: Record<string, string>;
+  timeout_secs: number;
+}
+
+export interface CommandTaskConfig {
+  command: string;
+  working_directory?: string;
+  timeout_secs: number;
+}
+
+export interface ApiTaskConfig {
+  config_id?: string;
+  url: string;
+  method: string;
+  headers?: Record<string, string>;
+  body?: string;
+  timeout_secs: number;
+}
+
+export interface RetryConfig {
+  max_retries: number;
+  retry_interval_secs: number;
+  backoff_multiplier?: number;
+}
+
+export interface ScheduledTask {
+  id: string;
+  name: string;
+  description?: string;
+  scheduleType: 'simple' | 'cron' | 'once';
+  scheduleConfig: string; // JSON string
+  taskType: 'script' | 'command' | 'api';
+  taskConfig: string; // JSON string
+  retryConfig?: string; // JSON string
+  enabled: boolean;
+  lastRunAt?: number;
+  nextRunAt?: number;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface TaskExecution {
+  id: string;
+  taskId: string;
+  scheduledTime: number;
+  startedAt?: number;
+  completedAt?: number;
+  status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled';
+  exitCode?: number;
+  stdout?: string;
+  stderr?: string;
+  errorMessage?: string;
+  durationMs?: number;
+  retryCount: number;
+}
+
+export interface CreateScheduledTaskInput {
+  name: string;
+  description?: string;
+  scheduleType: string;
+  scheduleConfig: string;
+  taskType: string;
+  taskConfig: string;
+  retryConfig?: string;
+  enabled?: boolean;
+}
+
+export interface UpdateScheduledTaskInput {
+  name?: string;
+  description?: string;
+  scheduleType?: string;
+  scheduleConfig?: string;
+  taskType?: string;
+  taskConfig?: string;
+  retryConfig?: string;
+  enabled?: boolean;
+}
+
+// ============================================================================
 // Store State
 // ============================================================================
 
@@ -218,6 +316,14 @@ interface AutomationState {
   fileEvents: FileEvent[];
   fileWatchersLoading: boolean;
   fileWatchersError: string | null;
+
+  // Scheduled Tasks
+  scheduledTasks: ScheduledTask[];
+  taskExecutions: TaskExecution[];
+  tasksLoading: boolean;
+  tasksError: string | null;
+  selectedTaskId: string | null;
+  runningTaskIds: string[];
 
   // Actions - Command History
   fetchCommandHistory: (search?: string) => Promise<void>;
@@ -258,6 +364,17 @@ interface AutomationState {
   fileRename: (old: string, new_: string) => Promise<void>;
   fileExists: (path: string) => Promise<boolean>;
   fileListDir: (path: string) => Promise<FileInfo[]>;
+
+  // Actions - Scheduled Tasks
+  fetchScheduledTasks: () => Promise<void>;
+  createScheduledTask: (input: CreateScheduledTaskInput) => Promise<ScheduledTask>;
+  updateScheduledTask: (id: string, input: UpdateScheduledTaskInput) => Promise<ScheduledTask>;
+  deleteScheduledTask: (id: string) => Promise<void>;
+  toggleScheduledTask: (id: string, enabled: boolean) => Promise<void>;
+  runTaskNow: (id: string) => Promise<TaskExecution>;
+  fetchTaskExecutions: (taskId: string, limit?: number) => Promise<void>;
+  setSelectedTaskId: (id: string | null) => void;
+  validateCronExpression: (expression: string) => Promise<string[]>;
 }
 
 // ============================================================================
@@ -287,6 +404,14 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
   fileEvents: [],
   fileWatchersLoading: false,
   fileWatchersError: null,
+
+  // Initial state - Scheduled Tasks
+  scheduledTasks: [],
+  taskExecutions: [],
+  tasksLoading: false,
+  tasksError: null,
+  selectedTaskId: null,
+  runningTaskIds: [],
 
   // Fetch command history
   fetchCommandHistory: async (search?: string) => {
@@ -540,5 +665,92 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
 
   fileListDir: async (path: string) => {
     return await invoke<FileInfo[]>('file_list_dir', { path });
+  },
+
+  // ============ Scheduled Task Actions ============
+
+  // Fetch scheduled tasks
+  fetchScheduledTasks: async () => {
+    set({ tasksLoading: true, tasksError: null });
+    try {
+      const tasks = await invoke<ScheduledTask[]>('list_scheduled_tasks');
+      set({ scheduledTasks: tasks, tasksLoading: false });
+    } catch (error) {
+      set({ tasksError: String(error), tasksLoading: false });
+    }
+  },
+
+  // Create scheduled task
+  createScheduledTask: async (input: CreateScheduledTaskInput) => {
+    const task = await invoke<ScheduledTask>('create_scheduled_task', { input });
+    set((state) => ({
+      scheduledTasks: [...state.scheduledTasks, task],
+    }));
+    return task;
+  },
+
+  // Update scheduled task
+  updateScheduledTask: async (id: string, input: UpdateScheduledTaskInput) => {
+    const task = await invoke<ScheduledTask>('update_scheduled_task', { id, input });
+    set((state) => ({
+      scheduledTasks: state.scheduledTasks.map((t) => (t.id === id ? task : t)),
+    }));
+    return task;
+  },
+
+  // Delete scheduled task
+  deleteScheduledTask: async (id: string) => {
+    await invoke('delete_scheduled_task', { id });
+    set((state) => ({
+      scheduledTasks: state.scheduledTasks.filter((t) => t.id !== id),
+    }));
+  },
+
+  // Toggle scheduled task enabled state
+  toggleScheduledTask: async (id: string, enabled: boolean) => {
+    await invoke('toggle_scheduled_task', { id, enabled });
+    set((state) => ({
+      scheduledTasks: state.scheduledTasks.map((t) =>
+        t.id === id ? { ...t, enabled } : t
+      ),
+    }));
+  },
+
+  // Run task immediately
+  runTaskNow: async (id: string) => {
+    set((state) => ({
+      runningTaskIds: [...state.runningTaskIds, id],
+    }));
+    try {
+      const execution = await invoke<TaskExecution>('run_task_now', { id });
+      return execution;
+    } finally {
+      set((state) => ({
+        runningTaskIds: state.runningTaskIds.filter((tid) => tid !== id),
+      }));
+    }
+  },
+
+  // Fetch task executions
+  fetchTaskExecutions: async (taskId: string, limit?: number) => {
+    try {
+      const executions = await invoke<TaskExecution[]>('get_task_executions', {
+        taskId,
+        limit: limit ?? 50,
+      });
+      set({ taskExecutions: executions });
+    } catch (error) {
+      console.error('Failed to fetch task executions:', error);
+    }
+  },
+
+  // Set selected task ID
+  setSelectedTaskId: (id: string | null) => {
+    set({ selectedTaskId: id });
+  },
+
+  // Validate cron expression
+  validateCronExpression: async (expression: string) => {
+    return await invoke<string[]>('validate_cron_expression_cmd', { expression });
   },
 }));

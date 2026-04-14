@@ -10,7 +10,9 @@ import { CommandHistory } from './CommandHistory';
 import { ApiCalls } from './ApiCalls';
 import { ScriptLibrary } from './ScriptLibrary';
 import { FileWatchers } from './FileWatchers';
-import { History, Eye, Code, Webhook } from 'lucide-react';
+import { ScheduledTasks } from './ScheduledTasks';
+import { SystemControl } from './SystemControl';
+import { History, Eye, Code, Webhook, Clock, Settings } from 'lucide-react';
 
 interface AutomationPanelProps {
   onRerunCommand?: (command: string) => void;
@@ -21,7 +23,7 @@ export function AutomationPanel({ onRerunCommand }: AutomationPanelProps) {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-      <TabsList className="grid w-full grid-cols-4 flex-shrink-0">
+      <TabsList className="grid w-full grid-cols-6 flex-shrink-0">
         <TabsTrigger value="history" className="flex items-center gap-1">
           <History className="h-4 w-4" />
           <span className="hidden sm:inline">历史</span>
@@ -37,6 +39,14 @@ export function AutomationPanel({ onRerunCommand }: AutomationPanelProps) {
         <TabsTrigger value="api" className="flex items-center gap-1">
           <Webhook className="h-4 w-4" />
           <span className="hidden sm:inline">API</span>
+        </TabsTrigger>
+        <TabsTrigger value="scheduled" className="flex items-center gap-1">
+          <Clock className="h-4 w-4" />
+          <span className="hidden sm:inline">定时</span>
+        </TabsTrigger>
+        <TabsTrigger value="system" className="flex items-center gap-1">
+          <Settings className="h-4 w-4" />
+          <span className="hidden sm:inline">系统</span>
         </TabsTrigger>
       </TabsList>
 
@@ -54,6 +64,14 @@ export function AutomationPanel({ onRerunCommand }: AutomationPanelProps) {
 
       <TabsContent value="api" className="flex-1 mt-0 overflow-auto">
         <ApiCalls />
+      </TabsContent>
+
+      <TabsContent value="scheduled" className="flex-1 mt-0 overflow-hidden">
+        <ScheduledTasks />
+      </TabsContent>
+
+      <TabsContent value="system" className="flex-1 mt-0 overflow-auto">
+        <SystemControl />
       </TabsContent>
     </Tabs>
   );
