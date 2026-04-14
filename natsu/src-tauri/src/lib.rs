@@ -7,6 +7,9 @@ mod terminal;
 mod file_watcher;
 mod platform;
 
+#[cfg(target_os = "android")]
+mod android;
+
 use commands::{storage, notes, links, search};
 use commands::ai as ai_commands;
 use commands::relations;
