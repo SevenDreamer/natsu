@@ -5,6 +5,7 @@ pub mod deepseek;
 pub mod ollama;
 pub mod tool;
 pub mod tool_manager;
+pub mod tools;
 
 pub use provider::{AIProvider, ProviderConfig, ProviderType, AIError, AIResponse, UsageInfo};
 pub use claude::ClaudeProvider;
@@ -13,3 +14,8 @@ pub use deepseek::DeepSeekProvider;
 pub use ollama::OllamaProvider;
 pub use tool::{ToolDefinition, ToolUse, ToolResult, ContentBlock, Message, ToolExecutor, SimpleToolExecutor};
 pub use tool_manager::{ToolManager, ToolManagerBuilder};
+pub use tools::{
+    ExecuteCommandTool, ExecuteCommandInput, CommandSafety, SafetyInfo,
+    CommandResult, ToolConfirmationRequest, check_command_safety,
+    QueryKnowledgeBaseTool, KnowledgeSearchResult,
+};

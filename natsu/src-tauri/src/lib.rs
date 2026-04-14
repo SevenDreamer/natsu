@@ -15,27 +15,42 @@ use commands::conversation;
 use std::sync::{Mutex, Arc};
 use tauri::Manager;
 use ai::tool_manager::ToolManager;
+use ai::{QueryKnowledgeBaseTool, ExecuteCommandTool};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let db = db::init_database().expect("Failed to init database");
+    let db_arc = Arc::new(Mutex::new(db));
 
-    // Initialize tool manager
+    // Initialize tool manager with built-in tools
     let tool_manager = Arc::new(ToolManager::new());
 
     tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
-        .manage(Mutex::new(db))
-        .manage(tool_manager)
-        .setup(|app| {
+        .manage(Arc::clone(&db_arc))
+        .manage(Arc::clone(&tool_manager))
+        .setup(move |app| {
             let handle = app.handle().clone();
             scheduler::start_scheduler(handle.clone());
 
             // Initialize PTY manager for terminal sessions
             let pty_manager = terminal_commands::init_pty_manager(handle);
             app.manage(pty_manager);
+
+            // Register tools that need async initialization
+            let tm = Arc::clone(&tool_manager);
+            let db_for_tool = Arc::clone(&db_arc);
+            tokio::spawn(async move {
+                // Register QueryKnowledgeBaseTool
+                let query_kb = QueryKnowledgeBaseTool::new(db_for_tool);
+                tm.register(query_kb).await;
+
+                // Register ExecuteCommandTool
+                let exec_cmd = ExecuteCommandTool::new();
+                tm.register(exec_cmd).await;
+            });
 
             Ok(())
         })
