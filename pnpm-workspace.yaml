@@ -1,0 +1,4 @@
+allowBuilds:
+  esbuild: true
+  live2d-widget: true
+onlyBuiltDependencies: '["esbuild"]'
