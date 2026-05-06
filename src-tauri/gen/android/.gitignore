@@ -1,0 +1,8 @@
+# Build outputs
+app/build/
+build/
+.gradle/
+.cxx/
+
+# Local configuration
+local.properties

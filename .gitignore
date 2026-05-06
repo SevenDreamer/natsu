@@ -9,7 +9,6 @@ dist/
 
 # Rust / Tauri
 src-tauri/target/
-src-tauri/gen/android/
 src-tauri/gen/schemas/
 
 # OS files
